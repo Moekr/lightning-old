@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#C8C8C8"/>
+    <title th:text="${category.name}+' | '+${properties.name}+' - '+${properties.logo}"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/pace.css}" />
+</head>
+<body>
+<div class="header">
+    <a class="header-logo" href="/">
+        <span th:text="${properties.logo}"></span>
+        <span class="header-logo-sub" th:text="${properties.name}"></span>
+    </a>
+    <ul class="header-menu">
+        <li>
+            <a th:href="@{/}">首页</a>
+        </li>
+        <li th:each="category,state:${categories}">
+            <a th:href="'/category/'+${category.id}" th:text="${category.name}"></a>
+        </li>
+        <li>
+            <a th:href="@{/about}">关于</a>
+        </li>
+    </ul>
+</div>
+<div class="main">
+    <div class="index">
+        <h1 class="category-title" th:text="'分类为「'+${category.name}+'」的文章'"></h1>
+        <div class="article" th:each="article,state:${articles}">
+            <div class="post-date">
+                <p th:text="${article.createdAt.toLocalDate()}"></p>
+            </div>
+            <h1>
+                <a th:href="'/article/'+${article.id}" th:text="${article.title}"></a>
+            </h1>
+            <div>
+                <p th:text="${article.summary}"></p>
+            </div>
+            <div>
+                <a th:href="'/article/'+${article.id}">继续阅读</a>
+            </div>
+        </div>
+        <div class="footer">
+            <p th:utext="${properties.footer}"></p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/pace.min.js}"></script>
+</body>
+</html>

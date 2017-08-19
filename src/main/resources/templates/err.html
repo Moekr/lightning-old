@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#C8C8C8"/>
+    <title th:text="'出错了'+' | '+${properties.name}+' - '+${properties.logo}"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/pace.css}" />
+</head>
+<body>
+<div class="header">
+    <a class="header-logo" href="/">Moekr<span class="header-logo-sub">萌客</span></a>
+    <ul class="header-menu">
+        <li>
+            <a th:href="@{/}">首页</a>
+        </li>
+        <li th:each="category,state:${categories}">
+            <a th:href="'/category/'+${category.id}" th:text="${category.name}"></a>
+        </li>
+        <li>
+            <a th:href="@{/about}">关于</a>
+        </li>
+    </ul>
+</div>
+<div class="main">
+    <div class="index">
+        <h1 class="error-title">Oops，似乎出现了一些问题……</h1>
+        <p th:text="'错误代码：'+${error}"></p>
+        <p th:text="'错误信息：'+${message}"></p>
+        <p>错误反馈：<a th:href="'mailto:'+${properties.email}" th:text="${properties.email}"></a></p>
+        <p><a th:href="@{/}" th:text="返回首页"></a></p>
+        <p th:if="${stack}">错误堆栈：</p>
+        <pre><code th:text="${stack}" th:if="${stack}"></code></pre>
+        <div class="footer">
+            <p th:utext="${properties.footer}"></p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/pace.min.js}"></script>
+</body>
+</html>
