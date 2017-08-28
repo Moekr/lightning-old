@@ -66,10 +66,10 @@ public abstract class ToolKit {
     }
 
     private static final Parser parser = Parser.builder().build();
-    private static final HtmlRenderer render = HtmlRenderer.builder().build();
+    private static final HtmlRenderer renderer = HtmlRenderer.builder().build();
 
     public static String parseMarkdown(String markdown){
-        return render.render(parser.parse(markdown));
+        return renderer.render(parser.parse(markdown));
     }
 
     public static HttpStatus httpStatus(HttpServletRequest request) {

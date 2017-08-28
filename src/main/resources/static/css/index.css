@@ -82,10 +82,9 @@ a {
 .main {
 	position: relative;
     z-index: 99;
-	margin: 50px auto;
-	max-width: 1200px;
+	margin: 42px auto;
 	display: block;
-    padding: 10px 0;
+    padding: 2px 0;
     background-color: rgba(240, 240, 240, 0.9);
 	box-shadow: 0 40px 70px -15px rgba(0, 0, 0, 0.3);
 }
@@ -141,7 +140,8 @@ a {
     }
 
     .main {
-        width: 90%;
+        width: 100%;
+        margin-bottom: 0;
     }
 
     .index, .post {
@@ -151,6 +151,20 @@ a {
 
 @media (min-width: 768px) and (max-width: 1366px) {
     .header-logo{
+        left: 10%;
+    }
+
+    .main {
+        width: 90%;
+    }
+
+    .index, .post {
+        margin: 0 30px;
+    }
+}
+
+@media (min-width: 1366px) and (max-width: 1920px) {
+    .header-logo{
         left: 15%;
     }
 
@@ -159,17 +173,17 @@ a {
     }
 
     .index, .post {
-        margin: 0 30px;
+        margin: 0 50px;
     }
 }
 
-@media (min-width: 1366px) {
+@media (min-width: 1920px) {
     .header-logo{
-        left: 20%;
+        left: calc((100% - 1344px)/2);
     }
 
     .main {
-        width: 70%;
+        width: 1536px;
     }
 
     .index, .post {
