@@ -42,7 +42,7 @@ public class ViewController {
     public String article(Map<String, Object> parameterMap, @PathVariable int articleId){
         parameterMap.put("properties", propertyService.getPropertiesAsMap());
         parameterMap.put("categories", categoryService.getCategories());
-        parameterMap.put("article", articleService.getArticle(articleId));
+        parameterMap.put("article", articleService.viewArticle(articleId));
         parameterMap.put("parser", (Function<String, String>)ToolKit::parseMarkdown);
         return "article";
     }

@@ -30,13 +30,13 @@
     <div class="index">
         <h1 class="category-title" th:text="'分类为「'+${category.name}+'」的文章'"></h1>
         <div class="article" th:each="article,state:${articles}">
-            <div class="post-date">
-                <p th:text="${article.createdAt.toLocalDate()}"></p>
-            </div>
-            <h1>
+            <h1 class="post-title">
                 <a th:href="'/article/'+${article.id}" th:text="${article.title}"></a>
             </h1>
-            <div>
+            <div class="post-date">
+                <p th:text="${article.views}+' 浏览 | '+${article.createdAt.toLocalDate()}"></p>
+            </div>
+            <div class="post-summary">
                 <p th:text="${article.summary}"></p>
             </div>
             <div>

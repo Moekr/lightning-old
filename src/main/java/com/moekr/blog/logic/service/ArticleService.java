@@ -53,6 +53,14 @@ public class ArticleService {
     }
 
     @Transactional
+    public ArticleVo viewArticle(int articleId){
+        Article article = articleDao.findById(articleId);
+        ToolKit.assertNotNull(articleId, article);
+        article.setViews(article.getViews() + 1);
+        return new ArticleVo(articleDao.save(article));
+    }
+
+    @Transactional
     public ArticleVo updateArticle(int articleId, ArticleDto articleDto){
         Article article = articleDao.findById(articleId);
         ToolKit.assertNotNull(articleId, article);

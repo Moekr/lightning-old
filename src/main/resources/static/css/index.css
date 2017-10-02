@@ -99,19 +99,24 @@ a {
     position: relative;
 }
 
+.article .post-title {
+    margin-top: 14px;
+    margin-bottom: 8px;
+}
+
 .post-date {
-    padding-top: 30px;
+    margin-top: -64px;
 	float: right;
 	font-size: 15px;
 	font-weight: 600;
 	color: #888;
 }
 
-.post-date p {
-    margin: 0;
+.post-summary p {
+    margin-top: 8px;
 }
 
-.post-title {
+.post .post-title {
 	margin-bottom: 0.3em;
 }
 
@@ -124,6 +129,8 @@ a {
 
 .post-tags {
 	float: right;
+    margin-top: -64px;
+    color: gray;
 }
 
 .footer {
@@ -134,7 +141,7 @@ a {
 
 /*Media查询CSS*/
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .header-logo{
         display: none;
     }
@@ -147,9 +154,19 @@ a {
     .index, .post {
         margin: 0 15px;
     }
+
+    .post-tags, .post-date {
+        float: none;
+        margin-top: 0;
+        font-size: 14px;
+    }
+
+    .post-tags p, .post-date p {
+        margin: 0;
+    }
 }
 
-@media (min-width: 768px) and (max-width: 1366px) {
+@media (min-width: 768px) and (max-width: 1365px) {
     .header-logo{
         left: 10%;
     }
@@ -161,9 +178,19 @@ a {
     .index, .post {
         margin: 0 30px;
     }
+
+    .post-tags, .post-date {
+        float: none;
+        margin-top: 0;
+        font-size: 14px;
+    }
+
+    .post-tags p, .post-date p {
+        margin: 0;
+    }
 }
 
-@media (min-width: 1366px) and (max-width: 1920px) {
+@media (min-width: 1366px) and (max-width: 1919px) {
     .header-logo{
         left: 15%;
     }
