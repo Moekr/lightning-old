@@ -5,7 +5,7 @@
 
     <groupId>com.moekr</groupId>
     <artifactId>moekr-blog</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <name>Moekr Blog</name>
     <description>Moekr Blog</description>
@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.6.RELEASE</version>
+        <version>1.5.8.RELEASE</version>
     </parent>
 
     <properties>
