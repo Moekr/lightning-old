@@ -12,6 +12,6 @@ import java.util.Map;
 public class AuthorityController {
     @PostMapping("/authority")
     public Map<String, Object> authority(){
-        return ToolKit.assemblyResponseBody(true);
+        return ToolKit.emptyResponseBody();
     }
 }

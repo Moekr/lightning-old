@@ -40,7 +40,7 @@ public class Article {
     private LocalDateTime modifiedAt;
 
     @Basic
-    @Column(name = "deleted_At")
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @Basic

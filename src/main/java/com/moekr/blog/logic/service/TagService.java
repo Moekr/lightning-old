@@ -48,10 +48,9 @@ public class TagService {
     }
 
     @Transactional
-    public TagVo deleteTag(String tagId){
+    public void deleteTag(String tagId){
         Tag tag = tagDao.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
         tagDao.delete(tag);
-        return new TagVo(tag);
     }
 }

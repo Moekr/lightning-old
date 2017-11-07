@@ -14,6 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class ToolKit {
+    public static Map<String, Object> emptyResponseBody(){
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("error", 0);
+        return responseBody;
+    }
+
     public static Map<String, Object> assemblyResponseBody(Object res){
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("error", 0);

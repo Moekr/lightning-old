@@ -41,6 +41,7 @@ public class ArticleController {
 
     @DeleteMapping("/article/{articleId}")
     public Map<String, Object> deleteArticle(@PathVariable int articleId){
-        return ToolKit.assemblyResponseBody(articleService.deleteArticle(articleId));
+        articleService.deleteArticle(articleId);
+        return ToolKit.emptyResponseBody();
     }
 }

@@ -36,6 +36,7 @@ public class CategoryController {
 
     @DeleteMapping("/category/{categoryId}")
     public Map<String, Object> deleteCategory(@PathVariable String categoryId){
-        return ToolKit.assemblyResponseBody(categoryService.deleteCategory(categoryId));
+        categoryService.deleteCategory(categoryId);
+        return ToolKit.emptyResponseBody();
     }
 }

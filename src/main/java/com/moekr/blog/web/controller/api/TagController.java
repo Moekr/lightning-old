@@ -36,6 +36,7 @@ public class TagController {
 
     @DeleteMapping("/tag/{tagId}")
     public Map<String, Object> deleteTag(@PathVariable String tagId){
-        return ToolKit.assemblyResponseBody(tagService.deleteTag(tagId));
+        tagService.deleteTag(tagId);
+        return ToolKit.emptyResponseBody();
     }
 }

@@ -48,10 +48,9 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryVo deleteCategory(String categoryId){
+    public void deleteCategory(String categoryId){
         Category category = categoryDao.findById(categoryId);
         ToolKit.assertNotNull(categoryId, category);
         categoryDao.delete(category);
-        return new CategoryVo(category);
     }
 }

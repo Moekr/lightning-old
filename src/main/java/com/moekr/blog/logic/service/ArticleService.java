@@ -72,10 +72,10 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleVo deleteArticle(int articleId){
+    public void deleteArticle(int articleId){
         Article article = articleDao.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
-        return new ArticleVo(articleDao.delete(article));
+        articleDao.delete(article);
     }
 
     private Category getCategory(String categoryId){
