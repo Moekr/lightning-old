@@ -1,5 +1,8 @@
 package com.moekr.blog.util.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Properties {
     LOGO("logo", "网站LOGO", "Moekr"),
     NAME("name", "网站名称", "萌客"),
@@ -17,17 +20,5 @@ public enum Properties {
         this.id = id;
         this.name = name;
         this.value = value;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getValue() {
-        return value;
     }
 }
