@@ -3,7 +3,6 @@ package com.moekr.blog.web.controller.error;
 import com.moekr.blog.logic.service.CategoryService;
 import com.moekr.blog.logic.service.PropertyService;
 import com.moekr.blog.util.ToolKit;
-import com.moekr.blog.web.controller.error.GlobalErrorController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

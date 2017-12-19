@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 
-@ControllerAdvice("com.moekr.blog.web.controller.view")
+@ControllerAdvice({"com.moekr.blog.web.controller.view", "com.moekr.blog.web.controller.redirect"})
 public class ViewExceptionHandler {
     private static final int DEFAULT_ERROR_CODE = 500;
 
