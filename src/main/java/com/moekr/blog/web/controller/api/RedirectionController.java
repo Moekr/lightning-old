@@ -19,7 +19,6 @@ public class RedirectionController {
         this.redirectionService = redirectionService;
     }
 
-    @PostMapping("/redirections")
     @PutMapping("/redirections")
     public Map<String, Object> createOrUpdateRedirection(@RequestBody @Valid RedirectionDto redirectionDto){
         return ToolKit.assemblyResponseBody(redirectionService.createOrUpdateRedirection(redirectionDto));
