@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-public class ArticleDto {
+public class ArticleDTO {
     @NotBlank
     private String title;
     @NotBlank

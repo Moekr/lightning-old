@@ -2,7 +2,7 @@ package com.moekr.blog.web.controller.api;
 
 import com.moekr.blog.logic.service.PropertyService;
 import com.moekr.blog.util.ToolKit;
-import com.moekr.blog.web.dto.PropertyDto;
+import com.moekr.blog.web.dto.PropertyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +30,7 @@ public class PropertyController {
     }
 
     @PutMapping("/property/{propertyId}")
-    public Map<String, Object> updateProperty(@PathVariable String propertyId, @RequestBody @Valid PropertyDto propertyDto){
-        return ToolKit.assemblyResponseBody(propertyService.updateProperty(propertyId, propertyDto));
+    public Map<String, Object> updateProperty(@PathVariable String propertyId, @RequestBody @Valid PropertyDTO propertyDTO){
+        return ToolKit.assemblyResponseBody(propertyService.updateProperty(propertyId, propertyDTO));
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class PropertyDto {
+public class PropertyDTO {
     @NotNull
     private String value;
 }

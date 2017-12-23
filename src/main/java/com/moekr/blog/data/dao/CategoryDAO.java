@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CategoryDao extends AbstractDao<Category, String>{
+public class CategoryDAO extends AbstractDAO<Category, String> {
     @Autowired
-    public CategoryDao(CategoryRepository repository) {
+    public CategoryDAO(CategoryRepository repository) {
         super(repository);
     }
 }

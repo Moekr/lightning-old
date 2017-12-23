@@ -2,7 +2,7 @@ package com.moekr.blog.web.controller.api;
 
 import com.moekr.blog.logic.service.RedirectionService;
 import com.moekr.blog.util.ToolKit;
-import com.moekr.blog.web.dto.RedirectionDto;
+import com.moekr.blog.web.dto.RedirectionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +20,8 @@ public class RedirectionController {
     }
 
     @PutMapping("/redirections")
-    public Map<String, Object> createOrUpdateRedirection(@RequestBody @Valid RedirectionDto redirectionDto){
-        return ToolKit.assemblyResponseBody(redirectionService.createOrUpdateRedirection(redirectionDto));
+    public Map<String, Object> createOrUpdateRedirection(@RequestBody @Valid RedirectionDTO redirectionDTO){
+        return ToolKit.assemblyResponseBody(redirectionService.createOrUpdateRedirection(redirectionDTO));
     }
 
     @GetMapping("/redirections")

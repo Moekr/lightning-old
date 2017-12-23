@@ -4,7 +4,7 @@ import com.moekr.blog.logic.service.ArticleService;
 import com.moekr.blog.logic.service.CategoryService;
 import com.moekr.blog.logic.service.PropertyService;
 import com.moekr.blog.logic.service.TagService;
-import com.moekr.blog.logic.vo.TagVo;
+import com.moekr.blog.logic.vo.TagVO;
 import com.moekr.blog.util.ToolKit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -65,7 +65,7 @@ public class ViewController {
         parameterMap.put("tag", tagService.getTag(tagId));
         parameterMap.put("articles", ToolKit.sort(articleService.getArticles().stream()
                 .filter(articleVo -> articleVo.getTags().stream()
-                        .map(TagVo::getId).anyMatch(tagId::equals))
+                        .map(TagVO::getId).anyMatch(tagId::equals))
                 .collect(Collectors.toList()), (a, b) -> b.getId()-a.getId()));
         return "tag";
     }

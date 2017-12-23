@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PropertyDao extends AbstractDao<Property, String>{
+public class PropertyDAO extends AbstractDAO<Property, String> {
     @Autowired
-    public PropertyDao(PropertyRepository repository) {
+    public PropertyDAO(PropertyRepository repository) {
         super(repository);
     }
 }

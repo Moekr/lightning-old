@@ -8,15 +8,16 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 @Repository
-public class ArticleDao extends AbstractDao<Article, Integer>{
+public class ArticleDAO extends AbstractDAO<Article, Integer> {
     private final ArticleRepository repository;
 
     @Autowired
-    public ArticleDao(ArticleRepository repository) {
+    public ArticleDAO(ArticleRepository repository) {
         super(repository);
         this.repository = repository;
     }
 
+    @Override
     public void delete(Article article){
         article.setDeletedAt(LocalDateTime.now());
         repository.save(article);

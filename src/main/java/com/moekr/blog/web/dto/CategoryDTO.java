@@ -4,7 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Data
-public class CategoryDto {
+public class CategoryDTO {
     @NotBlank
     private String name;
 }

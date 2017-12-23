@@ -5,11 +5,11 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 @Data
-public class CategoryVo {
+public class CategoryVO {
     private String id;
     private String name;
 
-    public CategoryVo(Category category){
+    public CategoryVO(Category category){
         BeanUtils.copyProperties(category, this);
     }
 }

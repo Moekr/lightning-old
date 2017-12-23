@@ -5,8 +5,8 @@ import com.moekr.blog.data.repository.RedirectionRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class RedirectionDao extends AbstractDao<Redirection, String>{
-    RedirectionDao(RedirectionRepository repository) {
+public class RedirectionDAO extends AbstractDAO<Redirection, String> {
+    RedirectionDAO(RedirectionRepository repository) {
         super(repository);
     }
 }

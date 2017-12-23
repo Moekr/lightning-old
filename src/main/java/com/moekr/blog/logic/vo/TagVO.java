@@ -5,11 +5,11 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 @Data
-public class TagVo {
+public class TagVO {
     private String id;
     private String name;
 
-    public TagVo(Tag tag){
+    public TagVO(Tag tag){
         BeanUtils.copyProperties(tag, this);
     }
 }

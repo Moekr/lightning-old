@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice("com.moekr.blog.web.controller.api")
-public class APIExceptionHandler {
+public class ApiExceptionHandler {
     private static final int DEFAULT_ERROR_CODE = 500;
 
     @ExceptionHandler(Exception.class)

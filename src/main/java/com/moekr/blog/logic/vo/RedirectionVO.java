@@ -5,12 +5,12 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 @Data
-public class RedirectionVo {
+public class RedirectionVO {
     private String id;
     private String location;
     private int views;
 
-    public RedirectionVo(Redirection redirection){
+    public RedirectionVO(Redirection redirection){
         BeanUtils.copyProperties(redirection, this);
     }
 }

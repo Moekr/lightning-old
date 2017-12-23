@@ -2,7 +2,7 @@ package com.moekr.blog.web.controller.api;
 
 import com.moekr.blog.logic.service.ArticleService;
 import com.moekr.blog.util.ToolKit;
-import com.moekr.blog.web.dto.ArticleDto;
+import com.moekr.blog.web.dto.ArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +20,8 @@ public class ArticleController {
     }
 
     @PostMapping("/articles")
-    public Map<String, Object> createArticle(@RequestBody @Valid ArticleDto articleDto){
-        return ToolKit.assemblyResponseBody(articleService.createArticle(articleDto));
+    public Map<String, Object> createArticle(@RequestBody @Valid ArticleDTO articleDTO){
+        return ToolKit.assemblyResponseBody(articleService.createArticle(articleDTO));
     }
 
     @GetMapping("/articles")
@@ -35,8 +35,8 @@ public class ArticleController {
     }
 
     @PutMapping("/article/{articleId}")
-    public Map<String, Object> updateArticle(@PathVariable int articleId, @RequestBody @Valid ArticleDto articleDto){
-        return ToolKit.assemblyResponseBody(articleService.updateArticle(articleId, articleDto));
+    public Map<String, Object> updateArticle(@PathVariable int articleId, @RequestBody @Valid ArticleDTO articleDTO){
+        return ToolKit.assemblyResponseBody(articleService.updateArticle(articleId, articleDTO));
     }
 
     @DeleteMapping("/article/{articleId}")

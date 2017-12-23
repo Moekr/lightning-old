@@ -71,11 +71,11 @@ public abstract class ToolKit {
         return stringWriter.toString();
     }
 
-    private static final Parser parser = Parser.builder().build();
-    private static final HtmlRenderer renderer = HtmlRenderer.builder().build();
+    private static final Parser PARSER = Parser.builder().build();
+    private static final HtmlRenderer RENDERER = HtmlRenderer.builder().build();
 
     public static String parseMarkdown(String markdown){
-        return renderer.render(parser.parse(markdown));
+        return RENDERER.render(PARSER.parse(markdown));
     }
 
     public static HttpStatus httpStatus(HttpServletRequest request) {

@@ -6,12 +6,12 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 @Data
-public class PropertyVo {
+public class PropertyVO {
     private String id;
     private String name;
     private String value;
 
-    public PropertyVo(Property property){
+    public PropertyVO(Property property){
         BeanUtils.copyProperties(property, this);
     }
 }

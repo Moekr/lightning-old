@@ -1,11 +1,11 @@
 package com.moekr.blog.logic.service;
 
-import com.moekr.blog.data.dao.PropertyDao;
+import com.moekr.blog.data.dao.PropertyDAO;
 import com.moekr.blog.data.entity.Property;
-import com.moekr.blog.logic.vo.PropertyVo;
+import com.moekr.blog.logic.vo.PropertyVO;
 import com.moekr.blog.util.ToolKit;
 import com.moekr.blog.util.enums.Properties;
-import com.moekr.blog.web.dto.PropertyDto;
+import com.moekr.blog.web.dto.PropertyDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,43 +17,43 @@ import java.util.stream.Collectors;
 
 @Service
 public class PropertyService {
-    private final PropertyDao propertyDao;
+    private final PropertyDAO propertyDAO;
 
     @Autowired
-    public PropertyService(PropertyDao propertyDao) {
-        this.propertyDao = propertyDao;
+    public PropertyService(PropertyDAO propertyDAO) {
+        this.propertyDAO = propertyDAO;
         checkProperties();
     }
 
-    public List<PropertyVo> getProperties(){
-        return propertyDao.findAll().stream().map(PropertyVo::new).collect(Collectors.toList());
+    public List<PropertyVO> getProperties(){
+        return propertyDAO.findAll().stream().map(PropertyVO::new).collect(Collectors.toList());
     }
 
-    public PropertyVo getProperty(String propertyId){
-        Property property = propertyDao.findById(propertyId);
+    public PropertyVO getProperty(String propertyId){
+        Property property = propertyDAO.findById(propertyId);
         ToolKit.assertNotNull(propertyId, property);
-        return new PropertyVo(property);
+        return new PropertyVO(property);
     }
 
     @Transactional
-    public PropertyVo updateProperty(String propertyId, PropertyDto propertyDto){
-        Property property = propertyDao.findById(propertyId);
+    public PropertyVO updateProperty(String propertyId, PropertyDTO propertyDTO){
+        Property property = propertyDAO.findById(propertyId);
         ToolKit.assertNotNull(propertyId, property);
-        BeanUtils.copyProperties(propertyDto, property);
-        return new PropertyVo(propertyDao.save(property));
+        BeanUtils.copyProperties(propertyDTO, property);
+        return new PropertyVO(propertyDAO.save(property));
     }
 
     public Map<String, String> getPropertiesAsMap(){
-        return ToolKit.iterableToMap(getProperties(), PropertyVo::getId, PropertyVo::getValue);
+        return ToolKit.iterableToMap(getProperties(), PropertyVO::getId, PropertyVO::getValue);
     }
 
     private void checkProperties(){
         for(Properties properties : Properties.values()){
-            Property property = propertyDao.findById(properties.getId());
+            Property property = propertyDAO.findById(properties.getId());
             if(property == null){
                 property = new Property();
                 BeanUtils.copyProperties(properties, property);
-                propertyDao.save(property);
+                propertyDAO.save(property);
             }
         }
     }

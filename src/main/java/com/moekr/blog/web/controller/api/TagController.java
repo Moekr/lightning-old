@@ -2,7 +2,7 @@ package com.moekr.blog.web.controller.api;
 
 import com.moekr.blog.logic.service.TagService;
 import com.moekr.blog.util.ToolKit;
-import com.moekr.blog.web.dto.TagDto;
+import com.moekr.blog.web.dto.TagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +30,8 @@ public class TagController {
     }
 
     @PutMapping("/tag/{tagId}")
-    public Map<String, Object> updateTag(@PathVariable String tagId, @RequestBody @Valid TagDto tagDto){
-        return ToolKit.assemblyResponseBody(tagService.updateTag(tagId, tagDto));
+    public Map<String, Object> updateTag(@PathVariable String tagId, @RequestBody @Valid TagDTO tagDTO){
+        return ToolKit.assemblyResponseBody(tagService.updateTag(tagId, tagDTO));
     }
 
     @DeleteMapping("/tag/{tagId}")

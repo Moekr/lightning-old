@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class ArticleVo {
+public class ArticleVO {
     private int id;
     private String title;
     private String summary;
@@ -17,12 +17,12 @@ public class ArticleVo {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private int views;
-    private CategoryVo category;
-    private List<TagVo> tags;
+    private CategoryVO category;
+    private List<TagVO> tags;
 
-    public ArticleVo(Article article){
+    public ArticleVO(Article article){
         BeanUtils.copyProperties(article,this, "category", "tags");
-        this.category = new CategoryVo(article.getCategory());
-        this.tags = article.getTags().stream().map(TagVo::new).collect(Collectors.toList());
+        this.category = new CategoryVO(article.getCategory());
+        this.tags = article.getTags().stream().map(TagVO::new).collect(Collectors.toList());
     }
 }

@@ -12,7 +12,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(GlobalErrorController.ERROR_PATH)
 @ResponseStatus(HttpStatus.OK)
-public class APIErrorController {
+public class ApiErrorController {
     @RequestMapping
     public Map<String, Object> error(HttpServletRequest request){
         HttpStatus httpStatus = ToolKit.httpStatus(request);

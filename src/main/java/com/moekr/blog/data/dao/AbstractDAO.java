@@ -6,10 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 import java.io.Serializable;
 import java.util.List;
 
-abstract class AbstractDao<T, ID extends Serializable> {
+abstract class AbstractDAO<T, ID extends Serializable> {
     private final CrudRepository<T, ID> repository;
 
-    AbstractDao(CrudRepository<T, ID> repository){
+    AbstractDAO(CrudRepository<T, ID> repository){
         this.repository = repository;
     }
 

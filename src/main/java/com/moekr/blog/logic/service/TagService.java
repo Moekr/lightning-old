@@ -1,10 +1,10 @@
 package com.moekr.blog.logic.service;
 
-import com.moekr.blog.data.dao.TagDao;
+import com.moekr.blog.data.dao.TagDAO;
 import com.moekr.blog.data.entity.Tag;
-import com.moekr.blog.logic.vo.TagVo;
+import com.moekr.blog.logic.vo.TagVO;
 import com.moekr.blog.util.ToolKit;
-import com.moekr.blog.web.dto.TagDto;
+import com.moekr.blog.web.dto.TagDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,39 +18,39 @@ import java.util.stream.Collectors;
 public class TagService {
     private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9_-]+$");
 
-    private final TagDao tagDao;
+    private final TagDAO tagDAO;
 
     @Autowired
-    public TagService(TagDao tagDao) {
-        this.tagDao = tagDao;
+    public TagService(TagDAO tagDAO) {
+        this.tagDAO = tagDAO;
     }
 
-    public List<TagVo> getTags(){
-        return tagDao.findAll().stream().map(TagVo::new).collect(Collectors.toList());
+    public List<TagVO> getTags(){
+        return tagDAO.findAll().stream().map(TagVO::new).collect(Collectors.toList());
     }
 
-    public TagVo getTag(String tagId){
-        Tag tag = tagDao.findById(tagId);
+    public TagVO getTag(String tagId){
+        Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
-        return new TagVo(tag);
+        return new TagVO(tag);
     }
 
     @Transactional
-    public TagVo updateTag(String tagId, TagDto tagDto){
-        Tag tag = tagDao.findById(tagId);
+    public TagVO updateTag(String tagId, TagDTO tagDTO){
+        Tag tag = tagDAO.findById(tagId);
         if(tag == null){
             ToolKit.assertPattern(tagId, PATTERN);
             tag = new Tag();
             tag.setId(tagId);
         }
-        BeanUtils.copyProperties(tagDto, tag);
-        return new TagVo(tagDao.save(tag));
+        BeanUtils.copyProperties(tagDTO, tag);
+        return new TagVO(tagDAO.save(tag));
     }
 
     @Transactional
     public void deleteTag(String tagId){
-        Tag tag = tagDao.findById(tagId);
+        Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
-        tagDao.delete(tag);
+        tagDAO.delete(tag);
     }
 }

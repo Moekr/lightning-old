@@ -2,7 +2,7 @@ package com.moekr.blog.web.controller.api;
 
 import com.moekr.blog.logic.service.CategoryService;
 import com.moekr.blog.util.ToolKit;
-import com.moekr.blog.web.dto.CategoryDto;
+import com.moekr.blog.web.dto.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +30,8 @@ public class CategoryController {
     }
 
     @PutMapping("/category/{categoryId}")
-    public Map<String, Object> updateCategory(@PathVariable String categoryId, @RequestBody @Valid CategoryDto categoryDto){
-        return ToolKit.assemblyResponseBody(categoryService.updateCategory(categoryId, categoryDto));
+    public Map<String, Object> updateCategory(@PathVariable String categoryId, @RequestBody @Valid CategoryDTO categoryDTO){
+        return ToolKit.assemblyResponseBody(categoryService.updateCategory(categoryId, categoryDTO));
     }
 
     @DeleteMapping("/category/{categoryId}")
