@@ -5,8 +5,10 @@ import com.moekr.blog.data.entity.Property;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
+import java.io.Serializable;
+
 @Data
-public class PropertyVO {
+public class PropertyVO implements Serializable {
     private String id;
     private String name;
     private String value;

@@ -7,6 +7,7 @@ import com.moekr.blog.util.ToolKit;
 import com.moekr.blog.web.dto.CategoryDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@CacheConfig(cacheNames = "category")
 public class CategoryService {
     private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9_-]+$");
 
@@ -25,10 +27,12 @@ public class CategoryService {
         this.categoryDAO = categoryDAO;
     }
 
+    @Cacheable(key = "'categoryList'")
     public List<CategoryVO> getCategories(){
         return categoryDAO.findAll().stream().map(CategoryVO::new).collect(Collectors.toList());
     }
 
+    @Cacheable(key = "#categoryId")
     public CategoryVO getCategory(String categoryId){
         Category category = categoryDAO.findById(categoryId);
         ToolKit.assertNotNull(categoryId, category);
@@ -36,6 +40,7 @@ public class CategoryService {
     }
 
     @Transactional
+    @Caching(put = @CachePut(key = "#categoryId"), evict = @CacheEvict(key = "'categoryList'"))
     public CategoryVO updateCategory(String categoryId, CategoryDTO categoryDTO){
         Category category = categoryDAO.findById(categoryId);
         if(category == null){
@@ -48,6 +53,7 @@ public class CategoryService {
     }
 
     @Transactional
+    @Caching(evict = {@CacheEvict(key = "#categoryId"), @CacheEvict(key = "'categoryList'")})
     public void deleteCategory(String categoryId){
         Category category = categoryDAO.findById(categoryId);
         ToolKit.assertNotNull(categoryId, category);

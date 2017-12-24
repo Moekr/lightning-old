@@ -5,6 +5,9 @@ spring:
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  cache:
+    jcache:
+      config: classpath:config/ehcache.xml
 endpoints:
   shutdown:
     enabled: true

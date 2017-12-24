@@ -4,8 +4,10 @@ import com.moekr.blog.data.entity.Category;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
+import java.io.Serializable;
+
 @Data
-public class CategoryVO {
+public class CategoryVO implements Serializable {
     private String id;
     private String name;
 
