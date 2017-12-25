@@ -89,4 +89,12 @@ public abstract class ToolKit {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
+
+    public static String remoteAddress(HttpServletRequest request) {
+        String header = request.getHeader("X-Forwarded-For");
+        if (header == null) {
+            return request.getRemoteAddr();
+        }
+        return header.split(",")[0];
+    }
 }
