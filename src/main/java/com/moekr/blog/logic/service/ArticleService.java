@@ -35,7 +35,7 @@ public class ArticleService {
 
     @Transactional
     @CachePut(key = "#result.id")
-    public ArticleVO createArticle(ArticleDTO articleDTO){
+    public ArticleVO createArticle(ArticleDTO articleDTO) {
         Article article = new Article();
         BeanUtils.copyProperties(articleDTO, article, "category", "tags");
         article.setCreatedAt(LocalDateTime.now());
@@ -46,12 +46,12 @@ public class ArticleService {
     }
 
     @Cacheable(key = "'articleList'")
-    public List<ArticleVO> getArticles(){
+    public List<ArticleVO> getArticles() {
         return articleDAO.findAll().stream().map(ArticleVO::new).collect(Collectors.toList());
     }
 
     @Cacheable(key = "#articleId")
-    public ArticleVO getArticle(int articleId){
+    public ArticleVO getArticle(int articleId) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
         return new ArticleVO(article);
@@ -59,7 +59,7 @@ public class ArticleService {
 
     @Transactional
     @Caching(put = @CachePut(key = "#articleId"), evict = @CacheEvict(key = "'articleList'"))
-    public ArticleVO viewArticle(int articleId){
+    public ArticleVO viewArticle(int articleId) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
         article.setViews(article.getViews() + 1);
@@ -68,7 +68,7 @@ public class ArticleService {
 
     @Transactional
     @Caching(put = @CachePut(key = "#articleId"), evict = @CacheEvict(key = "'articleList'"))
-    public ArticleVO updateArticle(int articleId, ArticleDTO articleDTO){
+    public ArticleVO updateArticle(int articleId, ArticleDTO articleDTO) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
         BeanUtils.copyProperties(articleDTO, article, "category", "tags");
@@ -80,25 +80,25 @@ public class ArticleService {
 
     @Transactional
     @Caching(evict = {@CacheEvict(key = "#articleId"), @CacheEvict(key = "'articleList'")})
-    public void deleteArticle(int articleId){
+    public void deleteArticle(int articleId) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
         articleDAO.delete(article);
     }
 
-    private Category getCategory(String categoryId){
+    private Category getCategory(String categoryId) {
         Category category = categoryDAO.findById(categoryId);
         ToolKit.assertNotNull(categoryId, category);
         return category;
     }
 
-    private Tag getTag(String tagId){
+    private Tag getTag(String tagId) {
         Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
         return tag;
     }
 
-    private List<Tag> getTags(List<String> tagIds){
+    private List<Tag> getTags(List<String> tagIds) {
         return tagIds.stream().map(this::getTag).collect(Collectors.toList());
     }
 }

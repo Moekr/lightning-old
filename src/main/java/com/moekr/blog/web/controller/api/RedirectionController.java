@@ -15,27 +15,27 @@ public class RedirectionController {
     private final RedirectionService redirectionService;
 
     @Autowired
-    public RedirectionController(RedirectionService redirectionService){
+    public RedirectionController(RedirectionService redirectionService) {
         this.redirectionService = redirectionService;
     }
 
     @PutMapping("/redirections")
-    public Map<String, Object> createOrUpdateRedirection(@RequestBody @Valid RedirectionDTO redirectionDTO){
+    public Map<String, Object> createOrUpdateRedirection(@RequestBody @Valid RedirectionDTO redirectionDTO) {
         return ToolKit.assemblyResponseBody(redirectionService.createOrUpdateRedirection(redirectionDTO));
     }
 
     @GetMapping("/redirections")
-    public Map<String, Object> getRedirections(){
+    public Map<String, Object> getRedirections() {
         return ToolKit.assemblyResponseBody(redirectionService.getRedirections());
     }
 
     @GetMapping("/redirection/{redirectionId}")
-    public Map<String, Object> getRedirection(@PathVariable String redirectionId){
+    public Map<String, Object> getRedirection(@PathVariable String redirectionId) {
         return ToolKit.assemblyResponseBody(redirectionService.getRedirection(redirectionId));
     }
 
     @DeleteMapping("/redirection/{redirectionId}")
-    public Map<String, Object> deleteRedirection(@PathVariable String redirectionId){
+    public Map<String, Object> deleteRedirection(@PathVariable String redirectionId) {
         redirectionService.deleteRedirection(redirectionId);
         return ToolKit.emptyResponseBody();
     }

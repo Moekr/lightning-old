@@ -18,7 +18,7 @@ public class ArticleDAO extends AbstractDAO<Article, Integer> {
     }
 
     @Override
-    public void delete(Article article){
+    public void delete(Article article) {
         article.setDeletedAt(LocalDateTime.now());
         repository.save(article);
     }

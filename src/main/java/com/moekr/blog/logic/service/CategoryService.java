@@ -28,12 +28,12 @@ public class CategoryService {
     }
 
     @Cacheable(key = "'categoryList'")
-    public List<CategoryVO> getCategories(){
+    public List<CategoryVO> getCategories() {
         return categoryDAO.findAll().stream().map(CategoryVO::new).collect(Collectors.toList());
     }
 
     @Cacheable(key = "#categoryId")
-    public CategoryVO getCategory(String categoryId){
+    public CategoryVO getCategory(String categoryId) {
         Category category = categoryDAO.findById(categoryId);
         ToolKit.assertNotNull(categoryId, category);
         return new CategoryVO(category);
@@ -41,9 +41,9 @@ public class CategoryService {
 
     @Transactional
     @Caching(put = @CachePut(key = "#categoryId"), evict = @CacheEvict(key = "'categoryList'"))
-    public CategoryVO updateCategory(String categoryId, CategoryDTO categoryDTO){
+    public CategoryVO updateCategory(String categoryId, CategoryDTO categoryDTO) {
         Category category = categoryDAO.findById(categoryId);
-        if(category == null){
+        if (category == null) {
             ToolKit.assertPattern(categoryId, PATTERN);
             category = new Category();
             category.setId(categoryId);
@@ -54,7 +54,7 @@ public class CategoryService {
 
     @Transactional
     @Caching(evict = {@CacheEvict(key = "#categoryId"), @CacheEvict(key = "'categoryList'")})
-    public void deleteCategory(String categoryId){
+    public void deleteCategory(String categoryId) {
         Category category = categoryDAO.findById(categoryId);
         ToolKit.assertNotNull(categoryId, category);
         categoryDAO.delete(category);

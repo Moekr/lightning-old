@@ -11,7 +11,7 @@ public class TagVO implements Serializable {
     private String id;
     private String name;
 
-    public TagVO(Tag tag){
+    public TagVO(Tag tag) {
         BeanUtils.copyProperties(tag, this);
     }
 }

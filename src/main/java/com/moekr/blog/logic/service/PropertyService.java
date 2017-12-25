@@ -28,12 +28,12 @@ public class PropertyService {
     }
 
     @Cacheable(key = "'propertyList'")
-    public List<PropertyVO> getProperties(){
+    public List<PropertyVO> getProperties() {
         return propertyDAO.findAll().stream().map(PropertyVO::new).collect(Collectors.toList());
     }
 
     @Cacheable(key = "#propertyId")
-    public PropertyVO getProperty(String propertyId){
+    public PropertyVO getProperty(String propertyId) {
         Property property = propertyDAO.findById(propertyId);
         ToolKit.assertNotNull(propertyId, property);
         return new PropertyVO(property);
@@ -41,7 +41,7 @@ public class PropertyService {
 
     @Transactional
     @Caching(put = @CachePut(key = "#propertyId"), evict = {@CacheEvict(key = "'propertyList'"), @CacheEvict(key = "'propertyMap'")})
-    public PropertyVO updateProperty(String propertyId, PropertyDTO propertyDTO){
+    public PropertyVO updateProperty(String propertyId, PropertyDTO propertyDTO) {
         Property property = propertyDAO.findById(propertyId);
         ToolKit.assertNotNull(propertyId, property);
         BeanUtils.copyProperties(propertyDTO, property);
@@ -54,10 +54,10 @@ public class PropertyService {
     }
 
     @PostConstruct
-    private void checkProperties(){
-        for(Properties properties : Properties.values()){
+    private void checkProperties() {
+        for (Properties properties : Properties.values()) {
             Property property = propertyDAO.findById(properties.getId());
-            if(property == null){
+            if (property == null) {
                 property = new Property();
                 BeanUtils.copyProperties(properties, property);
                 propertyDAO.save(property);

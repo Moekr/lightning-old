@@ -28,12 +28,12 @@ public class TagService {
     }
 
     @Cacheable(key = "'tagList'")
-    public List<TagVO> getTags(){
+    public List<TagVO> getTags() {
         return tagDAO.findAll().stream().map(TagVO::new).collect(Collectors.toList());
     }
 
     @Cacheable(key = "#tagId")
-    public TagVO getTag(String tagId){
+    public TagVO getTag(String tagId) {
         Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
         return new TagVO(tag);
@@ -41,9 +41,9 @@ public class TagService {
 
     @Transactional
     @Caching(put = @CachePut(key = "#tagId"), evict = @CacheEvict(key = "'tagList'"))
-    public TagVO updateTag(String tagId, TagDTO tagDTO){
+    public TagVO updateTag(String tagId, TagDTO tagDTO) {
         Tag tag = tagDAO.findById(tagId);
-        if(tag == null){
+        if (tag == null) {
             ToolKit.assertPattern(tagId, PATTERN);
             tag = new Tag();
             tag.setId(tagId);
@@ -54,7 +54,7 @@ public class TagService {
 
     @Transactional
     @Caching(evict = {@CacheEvict(key = "#tagId"), @CacheEvict(key = "'tagList'")})
-    public void deleteTag(String tagId){
+    public void deleteTag(String tagId) {
         Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
         tagDAO.delete(tag);

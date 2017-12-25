@@ -12,7 +12,7 @@ public class RedirectionVO implements Serializable {
     private String location;
     private int views;
 
-    public RedirectionVO(Redirection redirection){
+    public RedirectionVO(Redirection redirection) {
         BeanUtils.copyProperties(redirection, this);
     }
 }

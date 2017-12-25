@@ -19,7 +19,7 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(targetEntity = Article.class,mappedBy = "category")
+    @OneToMany(targetEntity = Article.class, mappedBy = "category")
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Article> articles;
 }

@@ -16,7 +16,7 @@ public enum Properties {
     private String name;
     private String value;
 
-    Properties(String id, String name, String value){
+    Properties(String id, String name, String value) {
         this.id = id;
         this.name = name;
         this.value = value;

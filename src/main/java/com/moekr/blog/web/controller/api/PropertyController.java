@@ -20,17 +20,17 @@ public class PropertyController {
     }
 
     @GetMapping("/properties")
-    public Map<String, Object> getProperties(){
+    public Map<String, Object> getProperties() {
         return ToolKit.assemblyResponseBody(propertyService.getProperties());
     }
 
     @GetMapping("/property/{propertyId}")
-    public Map<String, Object> getProperty(@PathVariable String propertyId){
+    public Map<String, Object> getProperty(@PathVariable String propertyId) {
         return ToolKit.assemblyResponseBody(propertyService.getProperty(propertyId));
     }
 
     @PutMapping("/property/{propertyId}")
-    public Map<String, Object> updateProperty(@PathVariable String propertyId, @RequestBody @Valid PropertyDTO propertyDTO){
+    public Map<String, Object> updateProperty(@PathVariable String propertyId, @RequestBody @Valid PropertyDTO propertyDTO) {
         return ToolKit.assemblyResponseBody(propertyService.updateProperty(propertyId, propertyDTO));
     }
 }

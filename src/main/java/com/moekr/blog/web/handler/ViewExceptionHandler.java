@@ -27,12 +27,12 @@ public class ViewExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
-    public String handle(HttpServletRequest request, Exception exception)  {
+    public String handle(HttpServletRequest request, Exception exception) {
         request.setAttribute("properties", propertyService.getPropertiesAsMap());
         request.setAttribute("categories", categoryService.getCategories());
-        if(exception instanceof ServiceException){
-            request.setAttribute("error", ((ServiceException)exception).getError());
-        }else{
+        if (exception instanceof ServiceException) {
+            request.setAttribute("error", ((ServiceException) exception).getError());
+        } else {
             request.setAttribute("error", DEFAULT_ERROR_CODE);
             request.setAttribute("stack", ToolKit.convertStackTrace(exception));
         }

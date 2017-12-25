@@ -27,7 +27,7 @@ public class ViewErrorController {
     }
 
     @RequestMapping(produces = MediaType.TEXT_HTML_VALUE)
-    public String errorHtml(Map<String, Object> parameterMap, HttpServletRequest request){
+    public String errorHtml(Map<String, Object> parameterMap, HttpServletRequest request) {
         parameterMap.put("properties", propertyService.getPropertiesAsMap());
         parameterMap.put("categories", categoryService.getCategories());
         HttpStatus status = ToolKit.httpStatus(request);

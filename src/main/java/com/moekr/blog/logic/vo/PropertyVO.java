@@ -13,7 +13,7 @@ public class PropertyVO implements Serializable {
     private String name;
     private String value;
 
-    public PropertyVO(Property property){
+    public PropertyVO(Property property) {
         BeanUtils.copyProperties(property, this);
     }
 }

@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class GlobalErrorController implements ErrorController{
+public class GlobalErrorController implements ErrorController {
     static final String ERROR_PATH = "/error";
 
     @Override

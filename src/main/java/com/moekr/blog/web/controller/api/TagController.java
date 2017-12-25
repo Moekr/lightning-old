@@ -20,22 +20,22 @@ public class TagController {
     }
 
     @GetMapping("/tags")
-    public Map<String, Object> getTags(){
+    public Map<String, Object> getTags() {
         return ToolKit.assemblyResponseBody(tagService.getTags());
     }
 
     @GetMapping("/tag/{tagId}")
-    public Map<String, Object> getTag(@PathVariable String tagId){
+    public Map<String, Object> getTag(@PathVariable String tagId) {
         return ToolKit.assemblyResponseBody(tagService.getTag(tagId));
     }
 
     @PutMapping("/tag/{tagId}")
-    public Map<String, Object> updateTag(@PathVariable String tagId, @RequestBody @Valid TagDTO tagDTO){
+    public Map<String, Object> updateTag(@PathVariable String tagId, @RequestBody @Valid TagDTO tagDTO) {
         return ToolKit.assemblyResponseBody(tagService.updateTag(tagId, tagDTO));
     }
 
     @DeleteMapping("/tag/{tagId}")
-    public Map<String, Object> deleteTag(@PathVariable String tagId){
+    public Map<String, Object> deleteTag(@PathVariable String tagId) {
         tagService.deleteTag(tagId);
         return ToolKit.emptyResponseBody();
     }

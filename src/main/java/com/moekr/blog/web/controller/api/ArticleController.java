@@ -20,27 +20,27 @@ public class ArticleController {
     }
 
     @PostMapping("/articles")
-    public Map<String, Object> createArticle(@RequestBody @Valid ArticleDTO articleDTO){
+    public Map<String, Object> createArticle(@RequestBody @Valid ArticleDTO articleDTO) {
         return ToolKit.assemblyResponseBody(articleService.createArticle(articleDTO));
     }
 
     @GetMapping("/articles")
-    public Map<String, Object> getArticles(){
+    public Map<String, Object> getArticles() {
         return ToolKit.assemblyResponseBody(articleService.getArticles());
     }
 
     @GetMapping("/article/{articleId}")
-    public Map<String, Object> getArticle(@PathVariable int articleId){
+    public Map<String, Object> getArticle(@PathVariable int articleId) {
         return ToolKit.assemblyResponseBody(articleService.getArticle(articleId));
     }
 
     @PutMapping("/article/{articleId}")
-    public Map<String, Object> updateArticle(@PathVariable int articleId, @RequestBody @Valid ArticleDTO articleDTO){
+    public Map<String, Object> updateArticle(@PathVariable int articleId, @RequestBody @Valid ArticleDTO articleDTO) {
         return ToolKit.assemblyResponseBody(articleService.updateArticle(articleId, articleDTO));
     }
 
     @DeleteMapping("/article/{articleId}")
-    public Map<String, Object> deleteArticle(@PathVariable int articleId){
+    public Map<String, Object> deleteArticle(@PathVariable int articleId) {
         articleService.deleteArticle(articleId);
         return ToolKit.emptyResponseBody();
     }

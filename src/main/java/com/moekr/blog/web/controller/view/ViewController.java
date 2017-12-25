@@ -31,50 +31,50 @@ public class ViewController {
     }
 
     @GetMapping("/")
-    public String index(Map<String, Object> parameterMap){
+    public String index(Map<String, Object> parameterMap) {
         parameterMap.put("properties", propertyService.getPropertiesAsMap());
         parameterMap.put("categories", categoryService.getCategories());
-        parameterMap.put("articles", ToolKit.sort(articleService.getArticles(), (a, b) -> b.getId()-a.getId()));
+        parameterMap.put("articles", ToolKit.sort(articleService.getArticles(), (a, b) -> b.getId() - a.getId()));
         return "index";
     }
 
     @GetMapping("/article/{articleId}")
-    public String article(Map<String, Object> parameterMap, @PathVariable int articleId){
+    public String article(Map<String, Object> parameterMap, @PathVariable int articleId) {
         parameterMap.put("properties", propertyService.getPropertiesAsMap());
         parameterMap.put("categories", categoryService.getCategories());
         parameterMap.put("article", articleService.viewArticle(articleId));
-        parameterMap.put("parser", (Function<String, String>)ToolKit::parseMarkdown);
+        parameterMap.put("parser", (Function<String, String>) ToolKit::parseMarkdown);
         return "article";
     }
 
     @GetMapping("/category/{categoryId}")
-    public String category(Map<String, Object> parameterMap, @PathVariable String categoryId){
+    public String category(Map<String, Object> parameterMap, @PathVariable String categoryId) {
         parameterMap.put("properties", propertyService.getPropertiesAsMap());
         parameterMap.put("categories", categoryService.getCategories());
         parameterMap.put("category", categoryService.getCategory(categoryId));
         parameterMap.put("articles", ToolKit.sort(articleService.getArticles().stream()
                 .filter(articleVo -> categoryId.equals(articleVo.getCategory().getId()))
-                .collect(Collectors.toList()), (a, b) -> b.getId()-a.getId()));
+                .collect(Collectors.toList()), (a, b) -> b.getId() - a.getId()));
         return "category";
     }
 
     @GetMapping("/tag/{tagId}")
-    public String tag(Map<String, Object> parameterMap, @PathVariable String tagId){
+    public String tag(Map<String, Object> parameterMap, @PathVariable String tagId) {
         parameterMap.put("properties", propertyService.getPropertiesAsMap());
         parameterMap.put("categories", categoryService.getCategories());
         parameterMap.put("tag", tagService.getTag(tagId));
         parameterMap.put("articles", ToolKit.sort(articleService.getArticles().stream()
                 .filter(articleVo -> articleVo.getTags().stream()
                         .map(TagVO::getId).anyMatch(tagId::equals))
-                .collect(Collectors.toList()), (a, b) -> b.getId()-a.getId()));
+                .collect(Collectors.toList()), (a, b) -> b.getId() - a.getId()));
         return "tag";
     }
 
     @GetMapping("/about")
-    public String about(Map<String, Object> parameterMap){
+    public String about(Map<String, Object> parameterMap) {
         parameterMap.put("properties", propertyService.getPropertiesAsMap());
         parameterMap.put("categories", categoryService.getCategories());
-        parameterMap.put("parser", (Function<String, String>)ToolKit::parseMarkdown);
+        parameterMap.put("parser", (Function<String, String>) ToolKit::parseMarkdown);
         return "about";
     }
 }

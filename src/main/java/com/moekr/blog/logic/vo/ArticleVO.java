@@ -21,8 +21,8 @@ public class ArticleVO implements Serializable {
     private CategoryVO category;
     private List<TagVO> tags;
 
-    public ArticleVO(Article article){
-        BeanUtils.copyProperties(article,this, "category", "tags");
+    public ArticleVO(Article article) {
+        BeanUtils.copyProperties(article, this, "category", "tags");
         this.category = new CategoryVO(article.getCategory());
         this.tags = article.getTags().stream().map(TagVO::new).collect(Collectors.toList());
     }

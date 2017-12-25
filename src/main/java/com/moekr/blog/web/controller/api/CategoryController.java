@@ -20,22 +20,22 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    public Map<String, Object> getCategories(){
+    public Map<String, Object> getCategories() {
         return ToolKit.assemblyResponseBody(categoryService.getCategories());
     }
 
     @GetMapping("/category/{categoryId}")
-    public Map<String, Object> getCategory(@PathVariable String categoryId){
+    public Map<String, Object> getCategory(@PathVariable String categoryId) {
         return ToolKit.assemblyResponseBody(categoryService.getCategory(categoryId));
     }
 
     @PutMapping("/category/{categoryId}")
-    public Map<String, Object> updateCategory(@PathVariable String categoryId, @RequestBody @Valid CategoryDTO categoryDTO){
+    public Map<String, Object> updateCategory(@PathVariable String categoryId, @RequestBody @Valid CategoryDTO categoryDTO) {
         return ToolKit.assemblyResponseBody(categoryService.updateCategory(categoryId, categoryDTO));
     }
 
     @DeleteMapping("/category/{categoryId}")
-    public Map<String, Object> deleteCategory(@PathVariable String categoryId){
+    public Map<String, Object> deleteCategory(@PathVariable String categoryId) {
         categoryService.deleteCategory(categoryId);
         return ToolKit.emptyResponseBody();
     }

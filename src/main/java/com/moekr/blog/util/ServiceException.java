@@ -6,7 +6,7 @@ public class ServiceException extends RuntimeException {
 
     private int error;
 
-    ServiceException(int error, String message){
+    ServiceException(int error, String message) {
         super(message);
         this.error = error;
     }

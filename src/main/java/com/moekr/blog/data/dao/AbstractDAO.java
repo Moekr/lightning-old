@@ -9,23 +9,23 @@ import java.util.List;
 abstract class AbstractDAO<T, ID extends Serializable> {
     private final CrudRepository<T, ID> repository;
 
-    AbstractDAO(CrudRepository<T, ID> repository){
+    AbstractDAO(CrudRepository<T, ID> repository) {
         this.repository = repository;
     }
 
-    public T save(T entity){
+    public T save(T entity) {
         return repository.save(entity);
     }
 
-    public List<T> findAll(){
+    public List<T> findAll() {
         return ToolKit.iterableToList(repository.findAll());
     }
 
-    public T findById(ID entityId){
+    public T findById(ID entityId) {
         return repository.findOne(entityId);
     }
 
-    public void delete(T entity){
+    public void delete(T entity) {
         repository.delete(entity);
     }
 }

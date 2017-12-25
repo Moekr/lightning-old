@@ -11,7 +11,7 @@ public class CategoryVO implements Serializable {
     private String id;
     private String name;
 
-    public CategoryVO(Category category){
+    public CategoryVO(Category category) {
         BeanUtils.copyProperties(category, this);
     }
 }

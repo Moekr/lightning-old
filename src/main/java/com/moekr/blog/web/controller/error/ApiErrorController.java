@@ -14,7 +14,7 @@ import java.util.Map;
 @ResponseStatus(HttpStatus.OK)
 public class ApiErrorController {
     @RequestMapping
-    public Map<String, Object> error(HttpServletRequest request){
+    public Map<String, Object> error(HttpServletRequest request) {
         HttpStatus httpStatus = ToolKit.httpStatus(request);
         return ToolKit.assemblyResponseBody(httpStatus.value(), httpStatus.getReasonPhrase());
     }

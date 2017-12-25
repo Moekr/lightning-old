@@ -16,7 +16,7 @@ public class RedirectController {
     private final RedirectionService redirectionService;
 
     @Autowired
-    public RedirectController(RedirectionService redirectionService){
+    public RedirectController(RedirectionService redirectionService) {
         this.redirectionService = redirectionService;
     }
 
