@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@CacheConfig(cacheNames = "article")
+@CacheConfig(cacheNames = "service-cache")
 public class ArticleService {
     private final ArticleDAO articleDAO;
     private final CategoryDAO categoryDAO;
@@ -34,7 +34,7 @@ public class ArticleService {
     }
 
     @Transactional
-    @CachePut(key = "#result.id")
+    @CachePut(key = "'article-'+#result.id")
     public ArticleVO createArticle(ArticleDTO articleDTO) {
         Article article = new Article();
         BeanUtils.copyProperties(articleDTO, article, "category", "tags");
@@ -45,12 +45,12 @@ public class ArticleService {
         return new ArticleVO(articleDAO.save(article));
     }
 
-    @Cacheable(key = "'articleList'")
+    @Cacheable(key = "'article-'+'articleList'")
     public List<ArticleVO> getArticles() {
         return articleDAO.findAll().stream().map(ArticleVO::new).collect(Collectors.toList());
     }
 
-    @Cacheable(key = "#articleId")
+    @Cacheable(key = "'article-'+#articleId")
     public ArticleVO getArticle(int articleId) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
@@ -58,7 +58,7 @@ public class ArticleService {
     }
 
     @Transactional
-    @Caching(put = @CachePut(key = "#articleId"), evict = @CacheEvict(key = "'articleList'"))
+    @Caching(put = @CachePut(key = "'article-'+#articleId"), evict = @CacheEvict(key = "'article-'+'articleList'"))
     public ArticleVO viewArticle(int articleId) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
@@ -67,7 +67,7 @@ public class ArticleService {
     }
 
     @Transactional
-    @Caching(put = @CachePut(key = "#articleId"), evict = @CacheEvict(key = "'articleList'"))
+    @Caching(put = @CachePut(key = "'article-'+#articleId"), evict = @CacheEvict(key = "'article-'+'articleList'"))
     public ArticleVO updateArticle(int articleId, ArticleDTO articleDTO) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
@@ -79,7 +79,7 @@ public class ArticleService {
     }
 
     @Transactional
-    @Caching(evict = {@CacheEvict(key = "#articleId"), @CacheEvict(key = "'articleList'")})
+    @Caching(evict = {@CacheEvict(key = "'article-'+#articleId"), @CacheEvict(key = "'article-'+'articleList'")})
     public void deleteArticle(int articleId) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);

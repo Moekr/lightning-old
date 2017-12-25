@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@CacheConfig(cacheNames = "category")
+@CacheConfig(cacheNames = "service-cache")
 public class CategoryService {
     private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9_-]+$");
 
@@ -27,12 +27,12 @@ public class CategoryService {
         this.categoryDAO = categoryDAO;
     }
 
-    @Cacheable(key = "'categoryList'")
+    @Cacheable(key = "'category-'+'categoryList'")
     public List<CategoryVO> getCategories() {
         return categoryDAO.findAll().stream().map(CategoryVO::new).collect(Collectors.toList());
     }
 
-    @Cacheable(key = "#categoryId")
+    @Cacheable(key = "'category-'+#categoryId")
     public CategoryVO getCategory(String categoryId) {
         Category category = categoryDAO.findById(categoryId);
         ToolKit.assertNotNull(categoryId, category);
@@ -40,7 +40,7 @@ public class CategoryService {
     }
 
     @Transactional
-    @Caching(put = @CachePut(key = "#categoryId"), evict = @CacheEvict(key = "'categoryList'"))
+    @Caching(put = @CachePut(key = "'category-'+#categoryId"), evict = @CacheEvict(key = "'category-'+'categoryList'"))
     public CategoryVO updateCategory(String categoryId, CategoryDTO categoryDTO) {
         Category category = categoryDAO.findById(categoryId);
         if (category == null) {
@@ -53,7 +53,7 @@ public class CategoryService {
     }
 
     @Transactional
-    @Caching(evict = {@CacheEvict(key = "#categoryId"), @CacheEvict(key = "'categoryList'")})
+    @Caching(evict = {@CacheEvict(key = "'category-'+#categoryId"), @CacheEvict(key = "'category-'+'categoryList'")})
     public void deleteCategory(String categoryId) {
         Category category = categoryDAO.findById(categoryId);
         ToolKit.assertNotNull(categoryId, category);

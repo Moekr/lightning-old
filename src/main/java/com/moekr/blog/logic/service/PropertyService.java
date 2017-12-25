@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@CacheConfig(cacheNames = "property")
+@CacheConfig(cacheNames = "service-cache")
 public class PropertyService {
     private final PropertyDAO propertyDAO;
 
@@ -27,12 +27,12 @@ public class PropertyService {
         this.propertyDAO = propertyDAO;
     }
 
-    @Cacheable(key = "'propertyList'")
+    @Cacheable(key = "'property-'+'propertyList'")
     public List<PropertyVO> getProperties() {
         return propertyDAO.findAll().stream().map(PropertyVO::new).collect(Collectors.toList());
     }
 
-    @Cacheable(key = "#propertyId")
+    @Cacheable(key = "'property-'+#propertyId")
     public PropertyVO getProperty(String propertyId) {
         Property property = propertyDAO.findById(propertyId);
         ToolKit.assertNotNull(propertyId, property);
@@ -40,7 +40,7 @@ public class PropertyService {
     }
 
     @Transactional
-    @Caching(put = @CachePut(key = "#propertyId"), evict = {@CacheEvict(key = "'propertyList'"), @CacheEvict(key = "'propertyMap'")})
+    @Caching(put = @CachePut(key = "'property-'+#propertyId"), evict = {@CacheEvict(key = "'property-'+'propertyList'"), @CacheEvict(key = "'property-'+'propertyMap'")})
     public PropertyVO updateProperty(String propertyId, PropertyDTO propertyDTO) {
         Property property = propertyDAO.findById(propertyId);
         ToolKit.assertNotNull(propertyId, property);
@@ -48,7 +48,7 @@ public class PropertyService {
         return new PropertyVO(propertyDAO.save(property));
     }
 
-    @Cacheable(key = "'propertyMap'")
+    @Cacheable(key = "'property-'+'propertyMap'")
     public Map<String, String> getPropertiesAsMap() {
         return ToolKit.iterableToMap(getProperties(), PropertyVO::getId, PropertyVO::getValue);
     }

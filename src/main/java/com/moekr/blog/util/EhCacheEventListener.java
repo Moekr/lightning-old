@@ -10,9 +10,6 @@ public class EhCacheEventListener implements CacheEventListener<Object, Object> 
 
     @Override
     public void onEvent(CacheEvent<?, ?> event) {
-        LOGGER.info("Cache Event: " + event.getType() +
-                " Key: " + event.getKey() +
-                " Old Value: " + event.getOldValue() +
-                " New Value: " + event.getNewValue());
+        LOGGER.info("Cache Event: " + event.getType() + " Key: " + event.getKey());
     }
 }

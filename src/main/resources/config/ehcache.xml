@@ -19,27 +19,7 @@
         </resources>
     </cache-template>
 
-    <cache alias="article" uses-template="heap-cache">
-        <expiry>
-            <ttl unit="days">30</ttl>
-        </expiry>
-    </cache>
-    <cache alias="category" uses-template="heap-cache">
-        <expiry>
-            <ttl unit="days">30</ttl>
-        </expiry>
-    </cache>
-    <cache alias="tag" uses-template="heap-cache">
-        <expiry>
-            <ttl unit="days">30</ttl>
-        </expiry>
-    </cache>
-    <cache alias="redirection" uses-template="heap-cache">
-        <expiry>
-            <ttl unit="days">30</ttl>
-        </expiry>
-    </cache>
-    <cache alias="property" uses-template="heap-cache">
+    <cache alias="service-cache" uses-template="heap-cache">
         <expiry>
             <ttl unit="days">30</ttl>
         </expiry>

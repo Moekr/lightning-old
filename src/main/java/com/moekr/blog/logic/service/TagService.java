@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@CacheConfig(cacheNames = "tag")
+@CacheConfig(cacheNames = "service-cache")
 public class TagService {
     private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9_-]+$");
 
@@ -27,12 +27,12 @@ public class TagService {
         this.tagDAO = tagDAO;
     }
 
-    @Cacheable(key = "'tagList'")
+    @Cacheable(key = "'tag-'+'tagList'")
     public List<TagVO> getTags() {
         return tagDAO.findAll().stream().map(TagVO::new).collect(Collectors.toList());
     }
 
-    @Cacheable(key = "#tagId")
+    @Cacheable(key = "'tag-'+#tagId")
     public TagVO getTag(String tagId) {
         Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
@@ -40,7 +40,7 @@ public class TagService {
     }
 
     @Transactional
-    @Caching(put = @CachePut(key = "#tagId"), evict = @CacheEvict(key = "'tagList'"))
+    @Caching(put = @CachePut(key = "'tag-'+#tagId"), evict = @CacheEvict(key = "'tag-'+'tagList'"))
     public TagVO updateTag(String tagId, TagDTO tagDTO) {
         Tag tag = tagDAO.findById(tagId);
         if (tag == null) {
@@ -53,7 +53,7 @@ public class TagService {
     }
 
     @Transactional
-    @Caching(evict = {@CacheEvict(key = "#tagId"), @CacheEvict(key = "'tagList'")})
+    @Caching(evict = {@CacheEvict(key = "'tag-'+#tagId"), @CacheEvict(key = "'tag-'+'tagList'")})
     public void deleteTag(String tagId) {
         Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
