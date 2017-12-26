@@ -70,6 +70,18 @@ public class ViewController {
         return "tag";
     }
 
+    @GetMapping("/archive")
+    public String archive(Map<String, Object> parameterMap) {
+        parameterMap.put("properties", propertyService.getPropertiesAsMap());
+        parameterMap.put("categories", categoryService.getCategories());
+        parameterMap.put("months", ToolKit.sort(articleService.getArticles().stream()
+                .collect(Collectors.groupingBy(article -> article.getCreatedAt().getYear() * article.getCreatedAt().getMonthValue()))
+                .values().stream()
+                .map(list -> ToolKit.sort(list, (a, b) -> b.getId() - a.getId()))
+                .collect(Collectors.toList()), (a, b) -> b.get(0).getId() - a.get(0).getId()));
+        return "archive";
+    }
+
     @GetMapping("/about")
     public String about(Map<String, Object> parameterMap) {
         parameterMap.put("properties", propertyService.getPropertiesAsMap());

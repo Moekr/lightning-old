@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#C8C8C8"/>
+    <title th:text="'文章归档'+' | '+${properties['name']}+' - '+${properties['logo']}"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/pace.css}"/>
+</head>
+<body>
+<div class="header">
+    <a class="header-logo" href="/">
+        <span th:text="${properties['logo']}"></span>
+        <span class="header-logo-sub" th:text="${properties['name']}"></span>
+    </a>
+    <ul class="header-menu">
+        <li>
+            <a th:href="@{/}">首页</a>
+        </li>
+        <li th:each="category,state:${categories}">
+            <a th:href="'/category/'+${category.id}" th:text="${category.name}"></a>
+        </li>
+        <li>
+            <a th:href="@{/about}">关于</a>
+        </li>
+    </ul>
+</div>
+<div class="main">
+    <div class="post">
+        <h1 class="post-title">文章归档……</h1>
+        <th:block th:each="month,state:${months}">
+            <h2 th:text="${month.get(0).getCreatedAt().getYear()}+'年'+${month.get(0).getCreatedAt().getMonthValue()}+'月'"></h2>
+            <p th:each="article,state:${month}">
+                <span class="post-info" th:text="'['+${article.getCategory().getName()}+']'"></span>
+                <a th:href="'/article/'+${article.id}" th:text="${article.title}"></a>
+                <span class="post-date" th:text="'('+${article.getCreatedAt().toLocalDate()}+')'"></span>
+            </p>
+        </th:block>
+        <p th:if="${months.size()==0}">这里什么也没有……</p>
+        <p th:utext="${properties['eof']}"></p>
+        <div class="footer">
+            <p th:utext="${properties['footer']}"></p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/js/pace.min.js}"></script>
+</body>
+</html>
