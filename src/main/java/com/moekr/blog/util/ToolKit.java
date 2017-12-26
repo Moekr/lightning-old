@@ -40,9 +40,9 @@ public abstract class ToolKit {
         return list;
     }
 
-    public static <T, K, V> Map<K, V> iterableToMap(Iterable<T> iterable, Function<T, K> keyGenerator, Function<T, V> valueGenetator) {
+    public static <T, K, V> Map<K, V> iterableToMap(Iterable<T> iterable, Function<T, K> keyGenerator, Function<T, V> valueGenerator) {
         Map<K, V> map = new HashMap<>();
-        iterable.forEach(t -> map.put(keyGenerator.apply(t), valueGenetator.apply(t)));
+        iterable.forEach(t -> map.put(keyGenerator.apply(t), valueGenerator.apply(t)));
         return map;
     }
 
