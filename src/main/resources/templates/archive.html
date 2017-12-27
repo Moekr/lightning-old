@@ -34,7 +34,7 @@
             <p th:each="article,state:${month}">
                 <span class="post-info" th:text="'['+${article.getCategory().getName()}+']'"></span>
                 <a th:href="'/article/'+${article.id}" th:text="${article.title}"></a>
-                <span class="post-date" th:text="'('+${article.getCreatedAt().toLocalDate()}+')'"></span>
+                <span class="post-info" th:text="'('+${article.getCreatedAt().toLocalDate()}+')'"></span>
             </p>
         </th:block>
         <p th:if="${months.size()==0}">这里什么也没有……</p>
