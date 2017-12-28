@@ -17,11 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
 @CacheConfig(cacheNames = "service-cache")
 public class ArticleService {
+    private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9_-]+$");
+
     private final ArticleDAO articleDAO;
     private final CategoryDAO categoryDAO;
     private final TagDAO tagDAO;
@@ -37,7 +40,11 @@ public class ArticleService {
     @CachePut(key = "'article-'+#result.id")
     public ArticleVO createArticle(ArticleDTO articleDTO) {
         Article article = new Article();
-        BeanUtils.copyProperties(articleDTO, article, "category", "tags");
+        BeanUtils.copyProperties(articleDTO, article, "alias", "category", "tags");
+        if (!articleDTO.getAlias().isEmpty()) {
+            ToolKit.assertPattern(articleDTO.getAlias(), PATTERN);
+            article.setAlias(articleDTO.getAlias());
+        }
         article.setCreatedAt(LocalDateTime.now());
         article.setModifiedAt(article.getCreatedAt());
         article.setCategory(getCategory(articleDTO.getCategory()));
@@ -67,11 +74,26 @@ public class ArticleService {
     }
 
     @Transactional
+    @Caching(put = @CachePut(key = "'article-'+#result.id"), evict = @CacheEvict(key = "'article-'+'articleList'"))
+    public ArticleVO viewArticle(String alias) {
+        Article article = articleDAO.findByAlias(alias);
+        ToolKit.assertNotNull(alias, article);
+        article.setViews(article.getViews() + 1);
+        return new ArticleVO(articleDAO.save(article));
+    }
+
+    @Transactional
     @Caching(put = @CachePut(key = "'article-'+#articleId"), evict = @CacheEvict(key = "'article-'+'articleList'"))
     public ArticleVO updateArticle(int articleId, ArticleDTO articleDTO) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
-        BeanUtils.copyProperties(articleDTO, article, "category", "tags");
+        BeanUtils.copyProperties(articleDTO, article, "alias", "category", "tags");
+        if (!articleDTO.getAlias().isEmpty()) {
+            ToolKit.assertPattern(articleDTO.getAlias(), PATTERN);
+            article.setAlias(articleDTO.getAlias());
+        } else {
+            article.setAlias(null);
+        }
         article.setModifiedAt(LocalDateTime.now());
         article.setCategory(getCategory(articleDTO.getCategory()));
         article.setTags(getTags(articleDTO.getTags()));

@@ -15,6 +15,8 @@ public class ArticleVO implements Serializable {
     private String title;
     private String summary;
     private String content;
+    private String alias;
+    private boolean visible;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private int views;
@@ -22,7 +24,8 @@ public class ArticleVO implements Serializable {
     private List<TagVO> tags;
 
     public ArticleVO(Article article) {
-        BeanUtils.copyProperties(article, this, "category", "tags");
+        BeanUtils.copyProperties(article, this, "alias", "category", "tags");
+        this.alias = article.getAlias() == null ? "" : article.getAlias();
         this.category = new CategoryVO(article.getCategory());
         this.tags = article.getTags().stream().map(TagVO::new).collect(Collectors.toList());
     }

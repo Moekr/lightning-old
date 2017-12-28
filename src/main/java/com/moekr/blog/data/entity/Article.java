@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "ENTITY_ARTICLE")
+@Table(name = "ENTITY_ARTICLE", indexes = @Index(columnList = "alias"))
 @Where(clause = "deleted_at IS NULL")
 public class Article {
     @Id
@@ -30,6 +30,14 @@ public class Article {
     @Basic
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
+
+    @Basic
+    @Column(name = "alias")
+    private String alias;
+
+    @Basic
+    @Column(name = "visible", columnDefinition = "BIT DEFAULT 1")
+    private boolean visible = true;
 
     @Basic
     @Column(name = "created_at")

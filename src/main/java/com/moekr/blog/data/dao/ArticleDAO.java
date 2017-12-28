@@ -17,6 +17,10 @@ public class ArticleDAO extends AbstractDAO<Article, Integer> {
         this.repository = repository;
     }
 
+    public Article findByAlias(String alias) {
+        return repository.findByAlias(alias);
+    }
+
     @Override
     public void delete(Article article) {
         article.setDeletedAt(LocalDateTime.now());

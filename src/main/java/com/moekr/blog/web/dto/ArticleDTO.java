@@ -14,6 +14,10 @@ public class ArticleDTO {
     private String summary;
     @NotBlank
     private String content;
+    @NotNull
+    private String alias;
+    @NotNull
+    private boolean visible;
     @NotBlank
     private String category;
     @NotNull
