@@ -53,14 +53,14 @@ public abstract class ToolKit {
 
     public static <I extends Serializable, E> void assertNotNull(I id, E entity) {
         if (entity == null) {
-            throw new ServiceException(ServiceException.NOT_FOUND, "Entity Not Found: " + "[id = " + id + "]");
+            throw new ServiceException(ServiceException.NOT_FOUND, "Not Found");
         }
     }
 
     public static void assertPattern(CharSequence arg, Pattern pattern) {
         Matcher matcher = pattern.matcher(arg);
         if (!matcher.matches()) {
-            throw new ServiceException(ServiceException.BAD_REQUEST, "Bad Request: [arg = " + arg + "]");
+            throw new ServiceException(ServiceException.BAD_REQUEST, "Bad Request");
         }
     }
 
