@@ -4,6 +4,7 @@ import com.moekr.blog.logic.service.ArticleService;
 import com.moekr.blog.logic.service.CategoryService;
 import com.moekr.blog.logic.service.PropertyService;
 import com.moekr.blog.logic.service.TagService;
+import com.moekr.blog.logic.vo.CategoryVO;
 import com.moekr.blog.logic.vo.TagVO;
 import com.moekr.blog.util.ToolKit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,14 @@ public class ViewController {
 
     @GetMapping("/")
     public String index(Map<String, Object> parameterMap) {
-        parameterMap.put("properties", propertyService.getPropertiesAsMap());
-        parameterMap.put("categories", categoryService.getCategories());
+        commonProcess(parameterMap);
         parameterMap.put("articles", ToolKit.sort(articleService.getArticles(), (a, b) -> b.getId() - a.getId()));
         return "index";
     }
 
     @GetMapping("/article/{articleId}")
     public String article(Map<String, Object> parameterMap, @PathVariable int articleId) {
-        parameterMap.put("properties", propertyService.getPropertiesAsMap());
-        parameterMap.put("categories", categoryService.getCategories());
+        commonProcess(parameterMap);
         parameterMap.put("article", articleService.viewArticle(articleId));
         parameterMap.put("parser", (Function<String, String>) ToolKit::parseMarkdown);
         return "article";
@@ -49,8 +48,7 @@ public class ViewController {
 
     @GetMapping("/category/{categoryId}")
     public String category(Map<String, Object> parameterMap, @PathVariable String categoryId) {
-        parameterMap.put("properties", propertyService.getPropertiesAsMap());
-        parameterMap.put("categories", categoryService.getCategories());
+        commonProcess(parameterMap);
         parameterMap.put("category", categoryService.getCategory(categoryId));
         parameterMap.put("articles", ToolKit.sort(articleService.getArticles().stream()
                 .filter(articleVo -> categoryId.equals(articleVo.getCategory().getId()))
@@ -60,8 +58,7 @@ public class ViewController {
 
     @GetMapping("/tag/{tagId}")
     public String tag(Map<String, Object> parameterMap, @PathVariable String tagId) {
-        parameterMap.put("properties", propertyService.getPropertiesAsMap());
-        parameterMap.put("categories", categoryService.getCategories());
+        commonProcess(parameterMap);
         parameterMap.put("tag", tagService.getTag(tagId));
         parameterMap.put("articles", ToolKit.sort(articleService.getArticles().stream()
                 .filter(articleVo -> articleVo.getTags().stream()
@@ -72,8 +69,7 @@ public class ViewController {
 
     @GetMapping("/archive")
     public String archive(Map<String, Object> parameterMap) {
-        parameterMap.put("properties", propertyService.getPropertiesAsMap());
-        parameterMap.put("categories", categoryService.getCategories());
+        commonProcess(parameterMap);
         parameterMap.put("months", ToolKit.sort(articleService.getArticles().stream()
                 .collect(Collectors.groupingBy(article -> article.getCreatedAt().getYear() * article.getCreatedAt().getMonthValue()))
                 .values().stream()
@@ -84,9 +80,15 @@ public class ViewController {
 
     @GetMapping("/about")
     public String about(Map<String, Object> parameterMap) {
-        parameterMap.put("properties", propertyService.getPropertiesAsMap());
-        parameterMap.put("categories", categoryService.getCategories());
+        commonProcess(parameterMap);
         parameterMap.put("parser", (Function<String, String>) ToolKit::parseMarkdown);
         return "about";
+    }
+
+    private void commonProcess(Map<String, Object> parameterMap) {
+        parameterMap.put("properties", propertyService.getPropertiesAsMap());
+        parameterMap.put("categories", ToolKit.sort(categoryService.getCategories().stream()
+                .filter(CategoryVO::isVisible)
+                .collect(Collectors.toList()), (a, b) -> b.getLevel() - a.getLevel()));
     }
 }

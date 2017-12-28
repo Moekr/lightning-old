@@ -19,6 +19,14 @@ public class Category {
     @Column(name = "name")
     private String name;
 
+    @Basic
+    @Column(name = "level", columnDefinition = "INT(11) DEFAULT 50")
+    private int level = 50;
+
+    @Basic
+    @Column(name = "visible", columnDefinition = "BIT DEFAULT 1")
+    private boolean visible = true;
+
     @OneToMany(targetEntity = Article.class, mappedBy = "category")
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Article> articles;
