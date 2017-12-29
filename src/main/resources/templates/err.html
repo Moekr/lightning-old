@@ -15,8 +15,16 @@
         <li>
             <a th:href="@{/}">首页</a>
         </li>
-        <li th:each="category,state:${categories}">
-            <a th:href="'/category/'+${category.id}" th:text="${category.name}"></a>
+        <li>
+            <a href="#">分类</a>
+            <ul>
+                <li th:each="category,state:${categories}">
+                    <a th:href="'/category/'+${category.id}" th:text="${category.name}"></a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a th:href="@{/archive}">归档</a>
         </li>
         <li>
             <a th:href="@{/about}">关于</a>
