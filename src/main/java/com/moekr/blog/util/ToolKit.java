@@ -64,6 +64,12 @@ public abstract class ToolKit {
         }
     }
 
+    public static void assertVisible(Visible visible) {
+        if (!visible.isVisible()) {
+            throw new ServiceException(ServiceException.NOT_FOUND, "Not Found");
+        }
+    }
+
     public static String convertStackTrace(Throwable throwable) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);

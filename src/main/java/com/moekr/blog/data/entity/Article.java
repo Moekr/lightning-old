@@ -1,5 +1,6 @@
 package com.moekr.blog.data.entity;
 
+import com.moekr.blog.util.Visible;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "ENTITY_ARTICLE", indexes = @Index(columnList = "alias"))
 @Where(clause = "deleted_at IS NULL")
-public class Article {
+public class Article implements Visible {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

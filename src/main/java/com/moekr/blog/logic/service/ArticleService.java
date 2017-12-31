@@ -69,6 +69,7 @@ public class ArticleService {
     public ArticleVO viewArticle(int articleId) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
+        ToolKit.assertVisible(article);
         article.setViews(article.getViews() + 1);
         return new ArticleVO(articleDAO.save(article));
     }

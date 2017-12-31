@@ -44,13 +44,13 @@ public class ViewController {
         return "index";
     }
 
-    @GetMapping("/article/{articleId}")
-    public String article(Map<String, Object> parameterMap, @PathVariable int articleId) {
+    @GetMapping({"/article/{articleId}", "/{alias}"})
+    public String article(Map<String, Object> parameterMap, @PathVariable(required = false) Integer articleId, @PathVariable(required = false) String alias) {
         parameterMap.put("properties", propertyService.getPropertiesAsMap());
         parameterMap.put("categories", ToolKit.sort(categoryService.getCategories().stream()
                 .filter(CategoryVO::isVisible)
                 .collect(Collectors.toList()), (a, b) -> b.getLevel() - a.getLevel()));
-        parameterMap.put("article", articleService.viewArticle(articleId));
+        parameterMap.put("article", alias == null ? articleService.viewArticle(articleId) : articleService.viewArticle(alias));
         parameterMap.put("parser", (Function<String, String>) ToolKit::parseMarkdown);
         return "article";
     }
@@ -97,16 +97,5 @@ public class ViewController {
                 .map(list -> ToolKit.sort(list, (a, b) -> b.getId() - a.getId()))
                 .collect(Collectors.toList()), (a, b) -> b.get(0).getId() - a.get(0).getId()));
         return "archive";
-    }
-
-    @GetMapping("/{alias}")
-    public String page(Map<String, Object> parameterMap, @PathVariable String alias) {
-        parameterMap.put("properties", propertyService.getPropertiesAsMap());
-        parameterMap.put("categories", ToolKit.sort(categoryService.getCategories().stream()
-                .filter(CategoryVO::isVisible)
-                .collect(Collectors.toList()), (a, b) -> b.getLevel() - a.getLevel()));
-        parameterMap.put("article", articleService.viewArticle(alias));
-        parameterMap.put("parser", (Function<String, String>) ToolKit::parseMarkdown);
-        return "article";
     }
 }

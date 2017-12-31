@@ -1,5 +1,6 @@
 package com.moekr.blog.data.entity;
 
+import com.moekr.blog.util.Visible;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -10,7 +11,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "ENTITY_CATEGORY")
-public class Category {
+public class Category implements Visible {
     @Id
     @Column(name = "id")
     private String id;
