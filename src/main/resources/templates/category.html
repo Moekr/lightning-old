@@ -57,5 +57,10 @@
     </div>
 </div>
 <script type="text/javascript" th:src="@{/js/pace.min.js}"></script>
+<th:block th:if="${!#strings.isEmpty(properties['analytics'])}">
+    <script async="async" th:src="'https://www.googletagmanager.com/gtag/js?id='+${properties['analytics']}"></script>
+    <script type="text/javascript"
+            th:utext="'window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''+${properties['analytics']}+'\');'"></script>
+</th:block>
 </body>
 </html>

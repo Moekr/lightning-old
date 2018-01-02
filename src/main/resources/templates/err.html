@@ -36,7 +36,7 @@
         <h1 class="error-title">Oops，似乎出现了一些问题……</h1>
         <p th:text="'错误代码：'+${error}"></p>
         <p th:text="'错误信息：'+${message}"></p>
-        <p>错误反馈：<a th:href="'mailto:'+${properties['email']}" th:text="${properties['email']}"></a></p>
+        <p th:if="${!#strings.isEmpty(properties['email'])}">错误反馈：<a th:href="'mailto:'+${properties['email']}" th:text="${properties['email']}"></a></p>
         <p><a th:href="@{/}" th:text="返回首页"></a></p>
         <!--/*@thymesVar id="stack" type="java.lang.String"*/-->
         <p th:if="${stack}">错误堆栈：</p>
