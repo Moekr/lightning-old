@@ -37,7 +37,7 @@ public class ArticleService {
     }
 
     @Transactional
-    @CachePut(key = "'article-'+#result.id")
+    @Caching(put = @CachePut(key = "'article-'+#result.id"), evict = @CacheEvict(key = "'article-'+'articleList'"))
     public ArticleVO createArticle(ArticleDTO articleDTO) {
         Article article = new Article();
         BeanUtils.copyProperties(articleDTO, article, "alias", "category", "tags");

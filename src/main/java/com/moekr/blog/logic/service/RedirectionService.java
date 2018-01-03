@@ -25,7 +25,7 @@ public class RedirectionService {
     }
 
     @Transactional
-    @CachePut(key = "'redirection-'+#redirectionDTO.id")
+    @Caching(put = @CachePut(key = "'redirection-'+#redirectionDTO.id"), evict = @CacheEvict(key = "'redirection-'+'redirectionList'"))
     public RedirectionVO createOrUpdateRedirection(RedirectionDTO redirectionDTO) {
         Redirection redirection = redirectionDAO.findById(redirectionDTO.getId());
         if (redirection == null) {
