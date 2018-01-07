@@ -2,6 +2,7 @@ package com.moekr.blog.util;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,6 +70,12 @@ public abstract class ToolKit {
         if (!visible.isVisible()) {
             throw new ServiceException(ServiceException.NOT_FOUND, "Not Found");
         }
+    }
+
+    public static <T> T copyProperties(Object source, Supplier<T> targetSupplier) {
+        T target = targetSupplier.get();
+        BeanUtils.copyProperties(source, target);
+        return target;
     }
 
     public static String convertStackTrace(Throwable throwable) {

@@ -1,9 +1,6 @@
 package com.moekr.blog.web.controller.view;
 
-import com.moekr.blog.logic.service.ArticleService;
-import com.moekr.blog.logic.service.CategoryService;
-import com.moekr.blog.logic.service.PropertyService;
-import com.moekr.blog.logic.service.TagService;
+import com.moekr.blog.logic.service.*;
 import com.moekr.blog.logic.vo.ArticleVO;
 import com.moekr.blog.logic.vo.CategoryVO;
 import com.moekr.blog.logic.vo.TagVO;
@@ -23,13 +20,15 @@ public class ViewController {
     private final CategoryService categoryService;
     private final TagService tagService;
     private final PropertyService propertyService;
+    private final SearchService searchService;
 
     @Autowired
-    public ViewController(ArticleService articleService, CategoryService categoryService, TagService tagService, PropertyService propertyService) {
+    public ViewController(ArticleService articleService, CategoryService categoryService, TagService tagService, PropertyService propertyService, SearchService searchService) {
         this.articleService = articleService;
         this.categoryService = categoryService;
         this.tagService = tagService;
         this.propertyService = propertyService;
+        this.searchService = searchService;
     }
 
     @GetMapping("/")
@@ -97,5 +96,17 @@ public class ViewController {
                 .map(list -> ToolKit.sort(list, (a, b) -> b.getId() - a.getId()))
                 .collect(Collectors.toList()), (a, b) -> b.get(0).getId() - a.get(0).getId()));
         return "archive";
+    }
+
+    @GetMapping("/search/{key}")
+    public String search(Map<String, Object> parameterMap, @PathVariable String key) {
+        parameterMap.put("properties", propertyService.getPropertiesAsMap());
+        parameterMap.put("categories", ToolKit.sort(categoryService.getCategories().stream()
+                .filter(CategoryVO::isVisible)
+                .collect(Collectors.toList()), (a, b) -> b.getLevel() - a.getLevel()));
+        parameterMap.put("articles", searchService.searchArticle(key).stream()
+                .filter(ArticleVO::isVisible)
+                .collect(Collectors.toList()));
+        return "search";
     }
 }

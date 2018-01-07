@@ -14,8 +14,8 @@
             </listener>
         </listeners>
         <resources>
-            <heap>2000</heap>
-            <offheap unit="MB">100</offheap>
+            <heap>512</heap>
+            <offheap unit="MB">64</offheap>
         </resources>
     </cache-template>
 
