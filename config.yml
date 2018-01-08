@@ -10,8 +10,7 @@ spring:
   data:
     elasticsearch:
       properties:
-        logs: ./elasticsearch/log
-        data: ./elasticsearch/data
+        home: ./
 security:
   user:
     name: admin
