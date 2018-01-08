@@ -1,5 +1,5 @@
 .idea/
-target/
-data/
+/target/
+/data/
 moekr-blog.iml
 config-dev.yml
