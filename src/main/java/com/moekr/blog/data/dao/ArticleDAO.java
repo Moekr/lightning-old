@@ -29,7 +29,17 @@ public class ArticleDAO extends AbstractDAO<Article, Integer> {
     @PostConstruct
     private void index() {
         findAll().stream().map(a -> ToolKit.copyProperties(a, ArticleDTO::new)).forEach(searchRepository::index);
+    }
 
+    public List<Article> search(String key) {
+        return repository.findAll(ToolKit.iterableToList(searchRepository.search(new QueryStringQueryBuilder(key))).stream().map(ArticleDTO::getId).collect(Collectors.toList()));
+    }
+
+    @Override
+    public Article save(Article entity) {
+        Article article = super.save(entity);
+        searchRepository.index(ToolKit.copyProperties(article, ArticleDTO::new));
+        return article;
     }
 
     public Article findByAlias(String alias) {
@@ -40,9 +50,6 @@ public class ArticleDAO extends AbstractDAO<Article, Integer> {
     public void delete(Article article) {
         article.setDeletedAt(LocalDateTime.now());
         repository.save(article);
-    }
-
-    public List<Article> search(String key) {
-        return ToolKit.iterableToList(repository.findAll(ToolKit.iterableToList(searchRepository.search(new QueryStringQueryBuilder(key))).stream().map(ArticleDTO::getId).collect(Collectors.toList())));
+        searchRepository.delete(article.getId());
     }
 }

@@ -1,15 +1,14 @@
 package com.moekr.blog.data.dao;
 
-import com.moekr.blog.util.ToolKit;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.io.Serializable;
 import java.util.List;
 
 abstract class AbstractDAO<T, ID extends Serializable> {
-    private final CrudRepository<T, ID> repository;
+    private final JpaRepository<T, ID> repository;
 
-    AbstractDAO(CrudRepository<T, ID> repository) {
+    AbstractDAO(JpaRepository<T, ID> repository) {
         this.repository = repository;
     }
 
@@ -18,7 +17,7 @@ abstract class AbstractDAO<T, ID extends Serializable> {
     }
 
     public List<T> findAll() {
-        return ToolKit.iterableToList(repository.findAll());
+        return repository.findAll();
     }
 
     public T findById(ID entityId) {
