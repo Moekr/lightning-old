@@ -3,8 +3,10 @@ package com.moekr.blog.data.dao;
 import com.moekr.blog.data.dto.ArticleDTO;
 import com.moekr.blog.data.entity.Article;
 import com.moekr.blog.data.repository.ArticleRepository;
+import com.moekr.blog.data.search.ElasticsearchConfiguration;
 import com.moekr.blog.data.search.SearchRepository;
 import com.moekr.blog.util.ToolKit;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -32,7 +34,8 @@ public class ArticleDAO extends AbstractDAO<Article, Integer> {
     }
 
     public List<Article> search(String key) {
-        return repository.findAll(ToolKit.iterableToList(searchRepository.search(new QueryStringQueryBuilder(key))).stream().map(ArticleDTO::getId).collect(Collectors.toList()));
+        QueryBuilder queryBuilder = new QueryStringQueryBuilder(key).analyzer(ElasticsearchConfiguration.ANALYZER);
+        return repository.findAll(ToolKit.iterableToList(searchRepository.search(queryBuilder)).stream().map(ArticleDTO::getId).collect(Collectors.toList()));
     }
 
     @Override

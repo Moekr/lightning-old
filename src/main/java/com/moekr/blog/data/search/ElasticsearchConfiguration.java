@@ -23,6 +23,8 @@ public class ElasticsearchConfiguration implements DisposableBean {
     private static final Log LOG = LogFactory.getLog(ElasticsearchConfiguration.class);
     private static final Collection<Class<? extends Plugin>> PLUGINS = Collections.singletonList(AnalysisIkPlugin.class);
 
+    public static final String ANALYZER = "ik_max_word";
+
     private final ElasticsearchProperties properties;
 
     private Node node;
