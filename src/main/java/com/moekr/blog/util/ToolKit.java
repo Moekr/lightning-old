@@ -2,6 +2,7 @@ package com.moekr.blog.util;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.options.MutableDataSet;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 
@@ -85,10 +86,17 @@ public abstract class ToolKit {
         return stringWriter.toString();
     }
 
-    private static final Parser PARSER = Parser.builder().build();
-    private static final HtmlRenderer RENDERER = HtmlRenderer.builder().build();
+    private static Parser PARSER;
+    private static HtmlRenderer RENDERER;
 
     public static String parseMarkdown(String markdown) {
+        if (PARSER == null || RENDERER == null) {
+            MutableDataSet options = new MutableDataSet();
+            options.set(HtmlRenderer.HTML_BLOCK_OPEN_TAG_EOL, false);
+            options.set(HtmlRenderer.HTML_BLOCK_CLOSE_TAG_EOL, false);
+            PARSER = Parser.builder(options).build();
+            RENDERER = HtmlRenderer.builder(options).build();
+        }
         return RENDERER.render(PARSER.parse(markdown));
     }
 

@@ -38,18 +38,11 @@
     <div class="post">
         <h1 class="post-title" th:text="${article.title}"></h1>
         <div class="post-tags" th:if="${article.isVisible()}">
-            <p>
-                <span th:text="${article.views}"></span>
-                浏览 | 标签:
-                <span th:if="${#lists.isEmpty(article.tags)}">无可用标签</span>
-                <a th:each="tag,state:${article.tags}" th:href="'/tag/'+${tag.id}" th:text="${tag.name}"></a>
-            </p>
+            <p><span th:text="${article.views}"></span>浏览 | 标签:<span th:if="${#lists.isEmpty(article.tags)}">无可用标签</span><a th:each="tag,state:${article.tags}" th:href="'/tag/'+${tag.id}"
+                                                                                                                            th:text="${tag.name}"></a></p>
         </div>
-        <p class="post-info" th:if="${article.isVisible()}">
-            发表于<span th:text="${article.createdAt.toLocalDate()}"></span>，
-            最后修改于<span th:text="${article.modifiedAt.toLocalDate()}"></span>，
-            隶属于<a th:href="'/category/'+${article.category.id}" th:text="${article.category.name}"></a>分类
-        </p>
+        <p class="post-info" th:if="${article.isVisible()}">发表于<span th:text="${article.createdAt.toLocalDate()}"></span>， 最后修改于<span th:text="${article.modifiedAt.toLocalDate()}"></span>， 隶属于<a
+                th:href="'/category/'+${article.category.id}" th:text="${article.category.name}"></a>分类</p>
         <div th:utext="${parser.apply(article.content)}"></div>
         <p th:utext="${properties['eof']}"></p>
         <p th:utext="${properties['copyright']}"></p>
