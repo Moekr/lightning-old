@@ -1,5 +1,6 @@
 package com.moekr.blog.util;
 
+import com.moekr.blog.web.flexmark.CustomHtmlWriter;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.options.MutableDataSet;
@@ -97,7 +98,9 @@ public abstract class ToolKit {
             PARSER = Parser.builder(options).build();
             RENDERER = HtmlRenderer.builder(options).build();
         }
-        return RENDERER.render(PARSER.parse(markdown));
+        CustomHtmlWriter htmlWriter = new CustomHtmlWriter();
+        RENDERER.render(PARSER.parse(markdown), htmlWriter);
+        return htmlWriter.toString();
     }
 
     public static HttpStatus httpStatus(HttpServletRequest request) {
