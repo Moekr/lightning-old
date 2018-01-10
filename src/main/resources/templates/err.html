@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#C8C8C8"/>
     <title th:text="'出错了'+' | '+${properties['name']}+' - '+${properties['logo']}"></title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/pace.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/index.min.css}"/>
 </head>
 <body>
 <div class="header">
@@ -46,6 +45,6 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" th:src="@{/js/pace.min.js}"></script>
+<script type="text/javascript" crossorigin="anonymous" integrity="sha256-EPrkNjGEmCWyazb3A/Epj+W7Qm2pB9vnfXw+X6LImPM=" src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
 </body>
 </html>
