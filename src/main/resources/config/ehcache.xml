@@ -21,7 +21,7 @@
 
     <cache alias="service-cache" uses-template="heap-cache">
         <expiry>
-            <ttl unit="days">30</ttl>
+            <ttl unit="hours">3</ttl>
         </expiry>
     </cache>
 </config>

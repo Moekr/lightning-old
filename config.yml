@@ -15,3 +15,10 @@ security:
   user:
     name: admin
     password: password
+
+blog:
+  analytics:
+    name: MoekrBlog
+    key: key.json
+    begin: 2018-01-01
+    view-id: 12345678

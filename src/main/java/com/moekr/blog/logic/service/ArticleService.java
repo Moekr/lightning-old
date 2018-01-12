@@ -64,23 +64,19 @@ public class ArticleService {
         return new ArticleVO(article);
     }
 
-    @Transactional
-    @Caching(put = @CachePut(key = "'article-'+#articleId"), evict = @CacheEvict(key = "'article-'+'articleList'"))
+    @Cacheable(key = "'article-'+#articleId")
     public ArticleVO viewArticle(int articleId) {
         Article article = articleDAO.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
         ToolKit.assertVisible(article);
-        article.setViews(article.getViews() + 1);
-        return new ArticleVO(articleDAO.save(article));
+        return new ArticleVO(article);
     }
 
-    @Transactional
-    @Caching(put = @CachePut(key = "'article-'+#result.id"), evict = @CacheEvict(key = "'article-'+'articleList'"))
+    @Cacheable(key = "'article-'+#alias")
     public ArticleVO viewArticle(String alias) {
         Article article = articleDAO.findByAlias(alias);
         ToolKit.assertNotNull(alias, article);
-        article.setViews(article.getViews() + 1);
-        return new ArticleVO(articleDAO.save(article));
+        return new ArticleVO(article);
     }
 
     @Transactional
