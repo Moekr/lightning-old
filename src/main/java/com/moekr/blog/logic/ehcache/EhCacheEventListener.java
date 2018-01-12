@@ -1,4 +1,4 @@
-package com.moekr.blog.util;
+package com.moekr.blog.logic.ehcache;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

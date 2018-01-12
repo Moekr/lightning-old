@@ -3,7 +3,7 @@
     <cache-template name="heap-cache">
         <listeners>
             <listener>
-                <class>com.moekr.blog.util.EhCacheEventListener</class>
+                <class>com.moekr.blog.logic.ehcache.EhCacheEventListener</class>
                 <event-firing-mode>ASYNCHRONOUS</event-firing-mode>
                 <event-ordering-mode>UNORDERED</event-ordering-mode>
                 <events-to-fire-on>CREATED</events-to-fire-on>
