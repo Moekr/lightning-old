@@ -5,11 +5,15 @@ import com.moekr.blog.logic.vo.ArticleVO;
 import com.moekr.blog.logic.vo.CategoryVO;
 import com.moekr.blog.logic.vo.TagVO;
 import com.moekr.blog.util.ToolKit;
+import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -52,6 +56,15 @@ public class ViewController {
         parameterMap.put("article", alias == null ? articleService.viewArticle(articleId) : articleService.viewArticle(alias));
         parameterMap.put("parser", (Function<String, String>) ToolKit::parseMarkdown);
         return "article";
+    }
+
+    private static final ContentType MARKDOWN_CONTENT_TYPE = ContentType.create(ContentType.TEXT_PLAIN.getMimeType(), Charset.forName("UTF-8"));
+
+    @GetMapping({"/article/{articleId}.md", "/{alias}.md"})
+    public void markdownArticle(HttpServletResponse response, @PathVariable(required = false) Integer articleId, @PathVariable(required = false) String alias) throws IOException {
+        ArticleVO article = alias == null ? articleService.viewArticle(articleId) : articleService.viewArticle(alias);
+        response.setContentType(MARKDOWN_CONTENT_TYPE.toString().toLowerCase());
+        response.getWriter().append(article.getContent());
     }
 
     @GetMapping("/category/{categoryId}")
