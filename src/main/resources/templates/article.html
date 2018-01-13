@@ -46,11 +46,14 @@
         <div th:utext="${parser.apply(article.content)}"></div>
         <p th:utext="${properties['eof']}"></p>
         <p th:utext="${properties['copyright']}"></p>
+        <div id="disqus_thread"></div>
         <div class="footer">
             <p th:utext="${properties['footer']}"></p>
         </div>
     </div>
 </div>
+<script th:utext="'var disqus_config=function(){this.page.url=\'https://moekr.com'+${#httpServletRequest.getRequestURI()}+'\';this.page.identifier=\''+${article.id}+'\';};'"></script>
+<script th:src="@{/js/disqus.min.js}"></script>
 <script type="text/javascript" crossorigin="anonymous" integrity="sha256-EPrkNjGEmCWyazb3A/Epj+W7Qm2pB9vnfXw+X6LImPM=" src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
 <th:block th:if="${!#strings.isEmpty(properties['analytics'])}">
     <script async="async" th:src="'https://www.googletagmanager.com/gtag/js?id='+${properties['analytics']}"></script>
