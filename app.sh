@@ -5,7 +5,7 @@ path=/opt/blog
 # Application name.
 name=moekr-blog
 # Application version.
-version=1.3.2
+version=1.3.3
 
 # Application config file. Default config.yml
 config_file=${path}/config.yml

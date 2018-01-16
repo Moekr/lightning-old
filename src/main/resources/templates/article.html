@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#C8C8C8"/>
     <title th:text="${article.title}+' | '+${properties['name']}+' - '+${properties['logo']}"></title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/index.min.css}"/>
+    <link rel="amphtml" th:href="'/amp'+${#httpServletRequest.getRequestURI()}">
 </head>
 <body>
 <div class="header">

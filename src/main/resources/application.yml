@@ -8,6 +8,8 @@ spring:
   cache:
     jcache:
       config: classpath:config/ehcache.xml
+  thymeleaf:
+    mode: LEGACYHTML5
 endpoints:
   shutdown:
     enabled: true

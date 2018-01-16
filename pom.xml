@@ -5,7 +5,7 @@
 
     <groupId>com.moekr</groupId>
     <artifactId>moekr-blog</artifactId>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
 
     <name>Moekr Blog</name>
     <description>Moekr Blog</description>
@@ -98,6 +98,11 @@
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
         </dependency>
 
         <dependency>
