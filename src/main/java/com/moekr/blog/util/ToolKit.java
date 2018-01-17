@@ -1,6 +1,9 @@
 package com.moekr.blog.util;
 
+import com.moekr.blog.web.flexmark.AmpCoreNodeRenderer;
 import com.moekr.blog.web.flexmark.CustomHtmlWriter;
+import com.vladsch.flexmark.Extension;
+import com.vladsch.flexmark.ext.attributes.AttributesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import org.springframework.beans.BeanUtils;
@@ -86,12 +89,20 @@ public abstract class ToolKit {
         return stringWriter.toString();
     }
 
-    private static final Parser PARSER = Parser.builder().build();
-    private static final HtmlRenderer RENDERER = HtmlRenderer.builder().build();
+    private static final Iterable<Extension> EXTENSION = Collections.singletonList(AttributesExtension.create());
+    private static final Parser PARSER = Parser.builder().extensions(EXTENSION).build();
+    private static final HtmlRenderer NORMAL_RENDERER = HtmlRenderer.builder().build();
+    private static final HtmlRenderer AMP_RENDERER = HtmlRenderer.builder().extensions(EXTENSION).nodeRendererFactory(AmpCoreNodeRenderer::new).build();
 
     public static String parseMarkdown(String markdown) {
         CustomHtmlWriter htmlWriter = new CustomHtmlWriter();
-        RENDERER.render(PARSER.parse(markdown), htmlWriter);
+        NORMAL_RENDERER.render(PARSER.parse(markdown), htmlWriter);
+        return htmlWriter.toString();
+    }
+
+    public static String parseAmpMarkdown(String markdown) {
+        CustomHtmlWriter htmlWriter = new CustomHtmlWriter();
+        AMP_RENDERER.render(PARSER.parse(markdown), htmlWriter);
         return htmlWriter.toString();
     }
 

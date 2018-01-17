@@ -36,7 +36,7 @@ public class AmpViewController {
                 .filter(CategoryVO::isVisible)
                 .collect(Collectors.toList()), (a, b) -> b.getLevel() - a.getLevel()));
         parameterMap.put("article", alias == null ? articleService.viewArticle(articleId) : articleService.viewArticle(alias));
-        parameterMap.put("parser", (Function<String, String>) ToolKit::parseMarkdown);
+        parameterMap.put("parser", (Function<String, String>) ToolKit::parseAmpMarkdown);
         return "amp/article";
     }
 }

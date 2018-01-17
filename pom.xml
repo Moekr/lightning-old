@@ -115,6 +115,11 @@
             <artifactId>flexmark</artifactId>
             <version>0.28.32</version>
         </dependency>
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-ext-attributes</artifactId>
+            <version>0.28.32</version>
+        </dependency>
 
         <dependency>
             <groupId>org.elasticsearch</groupId>
