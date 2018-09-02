@@ -1,6 +1,6 @@
 .idea/
 /target/
 /data/
-moekr-blog.iml
+*.iml
 config-dev.yml
 key.json

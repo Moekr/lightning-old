@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Application root directory.
-path=/opt/blog
+path=/opt/lightning
 # Application name.
-name=moekr-blog
+name=lightning
 # Application version.
 version=1.3.3
 
