@@ -21,7 +21,7 @@ abstract class AbstractDAO<T, ID extends Serializable> {
     }
 
     public T findById(ID entityId) {
-        return repository.findOne(entityId);
+        return repository.findById(entityId).orElse(null);
     }
 
     public void delete(T entity) {

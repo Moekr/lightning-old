@@ -1,6 +1,6 @@
 package com.moekr.lightning.web.flexmark;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class CustomHtmlWriter implements Appendable {
     private final StringBuilder stringBuilder;

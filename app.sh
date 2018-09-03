@@ -5,7 +5,7 @@ path=/opt/lightning
 # Application name.
 name=lightning
 # Application version.
-version=1.3.3
+version=2.0.0-SNAPSHOT
 
 # Application config file. Default config.yml
 config_file=${path}/config.yml

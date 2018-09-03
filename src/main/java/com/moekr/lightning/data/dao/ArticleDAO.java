@@ -35,7 +35,7 @@ public class ArticleDAO extends AbstractDAO<Article, Integer> {
 
     public List<Article> search(String key) {
         QueryBuilder queryBuilder = new QueryStringQueryBuilder(key).analyzer(ElasticsearchConfiguration.ANALYZER);
-        return repository.findAll(ToolKit.iterableToList(searchRepository.search(queryBuilder)).stream().map(ArticleDTO::getId).collect(Collectors.toList()));
+        return repository.findAllById(ToolKit.iterableToList(searchRepository.search(queryBuilder)).stream().map(ArticleDTO::getId).collect(Collectors.toList()));
     }
 
     @Override
@@ -53,6 +53,6 @@ public class ArticleDAO extends AbstractDAO<Article, Integer> {
     public void delete(Article article) {
         article.setDeletedAt(LocalDateTime.now());
         repository.save(article);
-        searchRepository.delete(article.getId());
+        searchRepository.deleteById(article.getId());
     }
 }

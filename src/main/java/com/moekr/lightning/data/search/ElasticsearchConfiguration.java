@@ -2,11 +2,11 @@ package com.moekr.lightning.data.search;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.elasticsearch.Version;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.node.InternalSettingsPreparer;
 import org.elasticsearch.node.Node;
-import org.elasticsearch.node.internal.InternalSettingsPreparer;
+import org.elasticsearch.node.NodeValidationException;
 import org.elasticsearch.plugin.analysis.ik.AnalysisIkPlugin;
 import org.elasticsearch.plugins.Plugin;
 import org.springframework.beans.factory.DisposableBean;
@@ -35,19 +35,21 @@ public class ElasticsearchConfiguration implements DisposableBean {
     }
 
     @Bean
-    public Client elasticsearchClient() {
-        Settings.Builder settings = Settings.settingsBuilder();
-        settings.put("node.local", true);
+    public Client elasticsearchClient() throws NodeValidationException {
+        Settings.Builder settings = Settings.builder();
+        settings.put("transport.type", "local");
         settings.put("http.enabled", false);
         settings.put("cluster.name", properties.getClusterName());
-        settings.put("path.home", properties.getProperties().getOrDefault("home", ""));
+        String home = properties.getProperties().getOrDefault("home", "./");
+        settings.put("path.home", home);
+        settings.put("path.data", home + "/data");
         node = new CustomNode(settings.build()).start();
         return node.client();
     }
 
     private static class CustomNode extends Node {
         private CustomNode(Settings settings) {
-            super(InternalSettingsPreparer.prepareEnvironment(settings, null), Version.CURRENT, PLUGINS);
+            super(InternalSettingsPreparer.prepareEnvironment(settings, null), PLUGINS);
         }
     }
 

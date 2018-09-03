@@ -7,7 +7,6 @@ import com.moekr.lightning.util.ToolKit;
 import com.moekr.lightning.web.dto.TagDTO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +15,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-@CacheConfig(cacheNames = "service-cache")
 public class TagService {
     private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9_-]+$");
 
@@ -27,12 +25,10 @@ public class TagService {
         this.tagDAO = tagDAO;
     }
 
-    @Cacheable(key = "'tag-'+'tagList'")
     public List<TagVO> getTags() {
         return tagDAO.findAll().stream().map(TagVO::new).collect(Collectors.toList());
     }
 
-    @Cacheable(key = "'tag-'+#tagId")
     public TagVO getTag(String tagId) {
         Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);
@@ -40,7 +36,6 @@ public class TagService {
     }
 
     @Transactional
-    @Caching(put = @CachePut(key = "'tag-'+#tagId"), evict = @CacheEvict(key = "'tag-'+'tagList'"))
     public TagVO updateTag(String tagId, TagDTO tagDTO) {
         Tag tag = tagDAO.findById(tagId);
         if (tag == null) {
@@ -53,7 +48,6 @@ public class TagService {
     }
 
     @Transactional
-    @Caching(evict = {@CacheEvict(key = "'tag-'+#tagId"), @CacheEvict(key = "'tag-'+'tagList'")})
     public void deleteTag(String tagId) {
         Tag tag = tagDAO.findById(tagId);
         ToolKit.assertNotNull(tagId, tag);

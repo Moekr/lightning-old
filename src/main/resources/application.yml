@@ -5,14 +5,13 @@ spring:
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-  cache:
-    jcache:
-      config: classpath:config/ehcache.xml
-  thymeleaf:
-    mode: LEGACYHTML5
-endpoints:
-  shutdown:
-    enabled: true
+    open-in-view: true
+
 management:
-  context-path: /api
-  add-application-context-header: false
+  endpoint:
+    shutdown:
+      enabled: true
+  server:
+    servlet:
+      context-path: /api
+    add-application-context-header: false
