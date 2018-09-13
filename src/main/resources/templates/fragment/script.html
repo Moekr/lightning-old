@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="ToolKit=${T(com.moekr.lightning.util.ToolKit)}">
+<body>
+<div th:fragment="script(identifier)" th:with="Properties=${ToolKit.properties}">
+    <script type="text/javascript" th:src="@{/webjars/pace/pace.min.js}"></script>
+    <script type="text/javascript" async th:src="'https://www.googletagmanager.com/gtag/js?id='+${Properties.analytics.appId}"></script>
+    <script th:inline="javascript">
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', [[${Properties.analytics.appId}]]);
+    </script>
+    <th:block th:if="${identifier}">
+        <script th:inline="javascript">
+            var disqus_config = function(){
+                this.page.url = [[${Properties.host}]] + window.location.pathname;
+                this.page.identifier = [[${identifier}]];
+            };
+        </script>
+        <script th:src="@{/js/disqus.js}" th:data-timestamp="${#dates.createNow().getTime()}"></script>
+    </th:block>
+</div>
+</body>
+</html>

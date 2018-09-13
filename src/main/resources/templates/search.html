@@ -1,65 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="theme-color" content="#C8C8C8"/>
-    <title th:text="'搜索 - '+${properties['logo']}"></title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.min.css}"/>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" th:with="ToolKit=${T(com.moekr.lightning.util.ToolKit)}">
+<head th:replace="fragment/head::head('搜索 | '+${ToolKit.FULL_NAME})"></head>
 <body>
-<div class="header">
-    <a class="header-logo" href="/">
-        <span th:text="${properties['logo']}"></span>
-        <span class="header-logo-sub" th:text="${properties['name']}"></span>
-    </a>
-    <ul class="header-menu">
-        <li>
-            <a th:href="@{/}">首页</a>
-        </li>
-        <li>
-            <a href="#">分类</a>
-            <ul>
-                <li th:each="category,state:${categories}">
-                    <a th:href="'/category/'+${category.id}" th:text="${category.name}"></a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a th:href="@{/archive}">归档</a>
-        </li>
-        <li>
-            <a th:href="@{/about}">关于</a>
-        </li>
-    </ul>
-</div>
+<header th:replace="fragment/header::header"></header>
 <div class="main">
-    <div class="index">
-        <h1 class="category-title" th:text="'搜索结果'"></h1>
-        <div class="article" th:each="article,state:${articles}">
-            <h1 class="post-title">
-                <a th:href="'/article/'+${article.id}" th:text="${article.title}"></a>
-            </h1>
-            <div class="post-date">
-                <p th:text="${article.views}+' 浏览 | '+${article.createdAt.toLocalDate()}"></p>
+    <div class="index" th:with="query=${#httpServletRequest.getParameter('q')}">
+        <form class="search-form" action="/search.html" method="GET">
+            <div class="search-wrapper">
+                <input class="search-input" type="search" name="q" placeholder="请输入关键字..." required th:value="${query}"/>
             </div>
-            <div class="post-summary">
-                <p th:text="${article.summary}"></p>
-            </div>
-            <div>
-                <a th:href="'/article/'+${article.id}">继续阅读</a>
-            </div>
-        </div>
-        <div class="footer">
-            <p th:utext="${properties['footer']}"></p>
-        </div>
+            <input class="search-submit" type="submit" value="搜索">
+        </form>
+        <h1 class="search-title" th:text="'搜索结果'"></h1>
+        <div th:replace="fragment/articles::articles('true')"></div>
+        <footer th:replace="fragment/footer::footer"></footer>
     </div>
 </div>
-<script type="text/javascript" crossorigin="anonymous" integrity="sha256-EPrkNjGEmCWyazb3A/Epj+W7Qm2pB9vnfXw+X6LImPM=" src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
-<th:block th:if="${!#strings.isEmpty(properties['analytics'])}">
-    <script async="async" th:src="'https://www.googletagmanager.com/gtag/js?id='+${properties['analytics']}"></script>
-    <script type="text/javascript"
-            th:utext="'window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''+${properties['analytics']}+'\');'"></script>
-</th:block>
+<div th:replace="fragment/script::script('false')"></div>
 </body>
 </html>

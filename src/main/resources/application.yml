@@ -15,3 +15,10 @@ management:
     servlet:
       context-path: /api
     add-application-context-header: false
+
+application:
+  name: ${project.name}
+  version: ${project.version}
+  url: ${project.url}
+  commit: ${git.commit.id.abbrev}
+  timestamp: ${maven.build.timestamp}

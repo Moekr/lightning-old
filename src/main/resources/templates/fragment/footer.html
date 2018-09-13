@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="ToolKit=${T(com.moekr.lightning.util.ToolKit)}">
+<body>
+<footer class="footer" th:fragment="footer">
+    <div class="container" th:with="Properties=${ToolKit.properties}">
+        <p class="text-center" th:inline="text">©2017-2018 Powered by <a target="_blank" th:href="${Properties.application.url}">[[${Properties.application.name}]]</a> - [[${Properties.application.version}]] - [[${Properties.application.commit}]]</p>
+    </div>
+</footer>
+</body>
+</html>

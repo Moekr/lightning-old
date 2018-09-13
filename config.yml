@@ -1,4 +1,5 @@
 server:
+  address: 127.0.0.1
   port: 8080
 spring:
   datasource:
@@ -17,8 +18,12 @@ security:
     password: password
 
 lightning:
+  host: https://moekr.com
+  eof: ''
+  copyright: ''
   analytics:
-    name: MoekrBlog
-    key: key.json
-    begin: 2018-01-01
+    app-name: lightning
+    app-id: UA-12345678-1
     view-id: 12345678
+    begin-date: 2018-01-01
+    key-file: key.json

@@ -51,7 +51,7 @@ function start {
         then
             mkdir -p ${log_dir}
         fi
-        java -server -jar ${path}/${name}-${version}.jar --spring.config.location=${config_file} 2>&1 >${log_dir}/$(date +${log_name}) &
+        java -server -jar ${path}/${name}-${version}.jar --spring.config.additional-location=${config_file} 2>&1 >${log_dir}/$(date +${log_name}) &
         local pid=$(echo -e "$!\c")
         echo -e "${pid}\c" > ${pid_file}
         echo "Start application ${name} successfully! (Version:${version} PID:${pid})"
@@ -59,47 +59,6 @@ function start {
 }
 
 function stop {
-    if [ -f ${pid_file} ]
-    then
-        if ! ps -p $(cat ${pid_file}) > /dev/null
-        then
-            rm -rf ${pid_file}
-        fi
-    fi
-    if [ -f ${pid_file} ]
-    then
-        eval $(parseConfig ${config_file})
-        local authorization=$(echo -e "${security_user_name}:${security_user_password}\c" | base64)
-        curl -o /dev/null -l -s -H "Content-type: application/json" -H "Authorization: Basic ${authorization}" -X POST http://localhost:${server_port}/api/shutdown
-        local pid=$(cat ${pid_file})
-        local count=${wait_count}
-        while((${count} > 0))
-        do
-            sleep 1
-            if ! ps -p ${pid} > /dev/null
-            then
-                rm -rf ${pid_file}
-                echo "Stop application ${name} successfully! (Version:${version})"
-                break
-            fi
-            count=`expr ${count} - 1`
-        done
-        if [ ${count} -eq 0 ]
-        then
-            echo "Failed to stop application ${name}! (Version:${version} PID:${pid})"
-            exit 1
-        fi
-    else
-        echo "Application ${name} is not running! (Version:${version})"
-    fi
-}
-
-function restart {
-    stop
-    start
-}
-
-function forceStop {
     if [ -f ${pid_file} ]
     then
         if ! ps -p $(cat ${pid_file}) > /dev/null
@@ -133,8 +92,8 @@ function forceStop {
     fi
 }
 
-function forceRestart {
-    forceStop
+function restart {
+    stop
     start
 }
 
@@ -170,12 +129,6 @@ stop)
 ;;
 restart)
     restart
-;;
-force-stop)
-    forceStop
-;;
-force-restart)
-    forceRestart
 ;;
 status)
     status

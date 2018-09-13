@@ -27,7 +27,6 @@ a {
 /*Pace载入条CSS*/
 
 .pace {
-    -webkit-pointer-events: none;
     pointer-events: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -118,19 +117,9 @@ a {
     color: rgb(200, 200, 200);
 }
 
-.header-menu li:hover li {
-    display: block
-}
-
-.header-menu li ul li {
-    display: none;
-    height: 40px;
-    background-color: rgba(0, 0, 0, 0.3);
-    -webkit-backdrop-filter: blur(10px);
-}
-
-.header-menu li ul li a {
-    line-height: 40px;
+.search-button {
+    width: 40px !important;
+    margin-left: 10px;
 }
 
 .main {
@@ -143,7 +132,36 @@ a {
     box-shadow: 0 40px 70px -15px rgba(0, 0, 0, 0.3);
 }
 
-.category-title, .tag-title, .error-title {
+.search-form {
+    margin-top: 30px;
+}
+
+.search-wrapper {
+    margin-right: 72px;
+}
+
+.search-input {
+    font-size: 16px;
+    height: 40px;
+    width: 100%;
+    border: 1px solid #bbb;
+    outline: 0;
+    padding: 4px 6px;
+}
+
+.search-submit {
+    background-color: #ddd;
+    font-size: 16px;
+    height: 40px;
+    position: absolute;
+    top: 32px;
+    width: 72px;
+    border: 1px solid #bbb;
+    border-left-width: 0;
+    outline: 0;
+}
+
+.search-title, .error-title {
     margin-bottom: 0;
 }
 
@@ -187,6 +205,41 @@ a {
     color: gray;
 }
 
+.no-articles {
+    margin: 30px 0;
+    text-align: center;
+}
+
+.pagination {
+    padding: 10px;
+    font-size: 14px;
+}
+
+.prev-page, .total-page, .next-page {
+    display: inline-block;
+    width: 33%;
+}
+
+.prev-page {
+    text-align: left;
+}
+
+.prev-page a {
+    margin-left: 10px;
+}
+
+.total-page {
+    text-align: center;
+}
+
+.next-page {
+    text-align: right;
+}
+
+.next-page a {
+    margin-right: 10px;
+}
+
 .footer {
     border-top: 1px solid #ddd;
     text-align: center;
@@ -207,6 +260,10 @@ a {
     .main {
         width: 100%;
         margin-bottom: 0;
+    }
+
+    .search-submit {
+        right: 15px;
     }
 
     .index, .post {
@@ -237,6 +294,10 @@ a {
         width: 90%;
     }
 
+    .search-submit {
+        right: 30px;
+    }
+
     .index, .post {
         margin: 0 30px;
     }
@@ -263,6 +324,10 @@ a {
 
     .main {
         width: 1220px;
+    }
+
+    .search-submit {
+        right: 50px;
     }
 
     .index, .post {

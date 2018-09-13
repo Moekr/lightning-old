@@ -1,25 +1,29 @@
 package com.moekr.lightning.util;
 
-import com.moekr.lightning.web.flexmark.AmpCoreNodeRenderer;
 import com.moekr.lightning.web.flexmark.CustomHtmlWriter;
 import com.vladsch.flexmark.Extension;
 import com.vladsch.flexmark.ext.attributes.AttributesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+import org.mozilla.javascript.tools.ToolErrorReporter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
-import java.io.Serializable;
-import java.io.StringWriter;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class ToolKit {
+    public static final Charset CHARSET = Charset.forName("UTF-8");
+    public static final String CHINESE_NAME = "萌客";
+    public static final String ENGLISH_NAME = "Moekr";
+    public static final String FULL_NAME = CHINESE_NAME + " - " + ENGLISH_NAME;
+
+    public static LightningProperties properties;
+
     public static Map<String, Object> emptyResponseBody() {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("error", 0);
@@ -40,38 +44,25 @@ public abstract class ToolKit {
         return responseBody;
     }
 
-    public static <T> List<T> iterableToList(Iterable<T> iterable) {
-        List<T> list = new ArrayList<>();
-        iterable.forEach(list::add);
-        return list;
-    }
-
-    public static <T, K, V> Map<K, V> iterableToMap(Iterable<T> iterable, Function<T, K> keyGenerator, Function<T, V> valueGenerator) {
-        Map<K, V> map = new HashMap<>();
-        iterable.forEach(t -> map.put(keyGenerator.apply(t), valueGenerator.apply(t)));
-        return map;
-    }
-
     public static <T> List<T> sort(List<T> list, Comparator<T> comparator) {
         list.sort(comparator);
         return list;
     }
 
+    public static String parseTags(Set<String> tags) {
+        if (tags.isEmpty()) {
+            return "无可用标签";
+        }
+        List<String> sortedTags = sort(new ArrayList<>(tags), String::compareTo);
+        return String.join(" / ", sortedTags);
+    }
+
+    public static <T> T defaultIfNull(T value, T defaultValue) {
+        return value == null ? defaultValue : value;
+    }
+
     public static <I extends Serializable, E> void assertNotNull(I id, E entity) {
         if (entity == null) {
-            throw new ServiceException(ServiceException.NOT_FOUND, "Not Found");
-        }
-    }
-
-    public static void assertPattern(CharSequence arg, Pattern pattern) {
-        Matcher matcher = pattern.matcher(arg);
-        if (!matcher.matches()) {
-            throw new ServiceException(ServiceException.BAD_REQUEST, "Bad Request");
-        }
-    }
-
-    public static void assertVisible(Visible visible) {
-        if (!visible.isVisible()) {
             throw new ServiceException(ServiceException.NOT_FOUND, "Not Found");
         }
     }
@@ -91,19 +82,23 @@ public abstract class ToolKit {
 
     private static final Iterable<Extension> EXTENSION = Collections.singletonList(AttributesExtension.create());
     private static final Parser PARSER = Parser.builder().extensions(EXTENSION).build();
-    private static final HtmlRenderer NORMAL_RENDERER = HtmlRenderer.builder().build();
-    private static final HtmlRenderer AMP_RENDERER = HtmlRenderer.builder().extensions(EXTENSION).nodeRendererFactory(AmpCoreNodeRenderer::new).build();
+    private static final HtmlRenderer RENDERER = HtmlRenderer.builder().build();
 
     public static String parseMarkdown(String markdown) {
         CustomHtmlWriter htmlWriter = new CustomHtmlWriter();
-        NORMAL_RENDERER.render(PARSER.parse(markdown), htmlWriter);
+        RENDERER.render(PARSER.parse(markdown), htmlWriter);
         return htmlWriter.toString();
     }
 
-    public static String parseAmpMarkdown(String markdown) {
-        CustomHtmlWriter htmlWriter = new CustomHtmlWriter();
-        AMP_RENDERER.render(PARSER.parse(markdown), htmlWriter);
-        return htmlWriter.toString();
+    public static String compressScript(String raw) throws IOException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(raw.getBytes(CHARSET));
+        Reader reader = new InputStreamReader(inputStream, CHARSET);
+        JavaScriptCompressor compressor = new JavaScriptCompressor(reader, new ToolErrorReporter(true));
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Writer writer = new OutputStreamWriter(outputStream, CHARSET);
+        compressor.compress(writer, -1, true, true, false, false);
+        writer.flush();
+        return new String(outputStream.toByteArray(), CHARSET);
     }
 
     public static HttpStatus httpStatus(HttpServletRequest request) {

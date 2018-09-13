@@ -26,12 +26,12 @@ public class RedirectionController {
 
     @GetMapping("/redirections")
     public Map<String, Object> getRedirections() {
-        return ToolKit.assemblyResponseBody(redirectionService.getRedirections());
+        return ToolKit.assemblyResponseBody(redirectionService.retrieveRedirections(0, Integer.MAX_VALUE));
     }
 
     @GetMapping("/redirection/{redirectionId}")
     public Map<String, Object> getRedirection(@PathVariable String redirectionId) {
-        return ToolKit.assemblyResponseBody(redirectionService.getRedirection(redirectionId));
+        return ToolKit.assemblyResponseBody(redirectionService.retrieveRedirection(redirectionId));
     }
 
     @DeleteMapping("/redirection/{redirectionId}")

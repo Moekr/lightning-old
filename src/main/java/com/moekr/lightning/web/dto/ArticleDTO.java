@@ -1,9 +1,11 @@
 package com.moekr.lightning.web.dto;
 
+import com.moekr.lightning.util.ArticleType;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Data
@@ -14,12 +16,11 @@ public class ArticleDTO {
     private String summary;
     @NotBlank
     private String content;
-    @NotNull
+    @NotBlank
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+$")
     private String alias;
     @NotNull
-    private boolean visible;
-    @NotBlank
-    private String category;
+    private ArticleType type;
     @NotNull
     private List<String> tags;
 }

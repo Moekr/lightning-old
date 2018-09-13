@@ -1,24 +1,28 @@
 package com.moekr.lightning.data.entity;
 
-import com.moekr.lightning.util.Visible;
+import com.moekr.lightning.data.converter.StringSetConverter;
+import com.moekr.lightning.util.ArticleType;
 import lombok.Data;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "ENTITY_ARTICLE", indexes = @Index(columnList = "alias"))
 @Where(clause = "deleted_at IS NULL")
-public class Article implements Visible {
+public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+
+    @Basic
+    @Column(name = "alias")
+    private String alias;
 
     @Basic
     @Column(name = "title")
@@ -33,14 +37,20 @@ public class Article implements Visible {
     private String content;
 
     @Basic
-    @Column(name = "alias")
-    private String alias;
+    @Column(name = "tags", columnDefinition = "JSON NOT NULL")
+    @Convert(converter = StringSetConverter.class)
+    private Set<String> tags;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private ArticleType type = ArticleType.NORMAL;
 
     @Basic
-    @Column(name = "visible", columnDefinition = "BIT DEFAULT 1")
-    private boolean visible = true;
+    @Column(name = "views")
+    private Integer views = 0;
 
     @Basic
+    @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -51,20 +61,4 @@ public class Article implements Visible {
     @Basic
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    @Basic
-    @Column(name = "views")
-    private int views;
-
-    @ManyToOne(targetEntity = Category.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "category", referencedColumnName = "id")
-    private Category category;
-
-    @ManyToMany(targetEntity = Tag.class)
-    @JoinTable(name = "LINK_ARTICLE_TAG",
-            joinColumns = @JoinColumn(name = "article", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "tag", referencedColumnName = "id")
-    )
-    @LazyCollection(LazyCollectionOption.EXTRA)
-    private List<Tag> tags;
 }

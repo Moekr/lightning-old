@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class RedirectionVO implements Serializable {
     private String id;
     private String location;
-    private int views;
+    private Integer views;
 
     public RedirectionVO(Redirection redirection) {
         BeanUtils.copyProperties(redirection, this);

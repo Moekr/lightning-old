@@ -1,114 +1,140 @@
 package com.moekr.lightning.logic.service;
 
-import com.moekr.lightning.data.dao.ArticleDAO;
-import com.moekr.lightning.data.dao.CategoryDAO;
-import com.moekr.lightning.data.dao.TagDAO;
 import com.moekr.lightning.data.entity.Article;
-import com.moekr.lightning.data.entity.Category;
-import com.moekr.lightning.data.entity.Tag;
+import com.moekr.lightning.data.repository.ArticleRepository;
+import com.moekr.lightning.data.search.ElasticsearchConfiguration;
+import com.moekr.lightning.data.search.IndexedArticle;
+import com.moekr.lightning.data.search.SearchRepository;
 import com.moekr.lightning.logic.vo.ArticleVO;
+import com.moekr.lightning.util.ArticleType;
 import com.moekr.lightning.util.ToolKit;
 import com.moekr.lightning.web.dto.ArticleDTO;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class ArticleService {
-    private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9_-]+$");
+    private static final Sort SORT = Sort.by(Sort.Order.desc("id"));
 
-    private final ArticleDAO articleDAO;
-    private final CategoryDAO categoryDAO;
-    private final TagDAO tagDAO;
+    private final ArticleRepository repository;
+    private final SearchRepository searchRepository;
+    private final Client client;
 
     @Autowired
-    public ArticleService(ArticleDAO articleDAO, CategoryDAO categoryDAO, TagDAO tagDAO) {
-        this.articleDAO = articleDAO;
-        this.categoryDAO = categoryDAO;
-        this.tagDAO = tagDAO;
+    public ArticleService(ArticleRepository repository, SearchRepository searchRepository, Client client) {
+        this.repository = repository;
+        this.searchRepository = searchRepository;
+        this.client = client;
     }
 
     @Transactional
     public ArticleVO createArticle(ArticleDTO articleDTO) {
         Article article = new Article();
-        BeanUtils.copyProperties(articleDTO, article, "alias", "category", "tags");
-        if (!articleDTO.getAlias().isEmpty()) {
-            ToolKit.assertPattern(articleDTO.getAlias(), PATTERN);
-            article.setAlias(articleDTO.getAlias());
-        }
-        article.setCreatedAt(LocalDateTime.now());
+        BeanUtils.copyProperties(articleDTO, article);
         article.setModifiedAt(article.getCreatedAt());
-        article.setCategory(getCategory(articleDTO.getCategory()));
-        article.setTags(getTags(articleDTO.getTags()));
-        return new ArticleVO(articleDAO.save(article));
+        article = repository.save(article);
+        searchRepository.index(article);
+        return new ArticleVO(article);
     }
 
-    public List<ArticleVO> getArticles() {
-        return articleDAO.findAll().stream().map(ArticleVO::new).collect(Collectors.toList());
+    public List<ArticleVO> retrieveArticles(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize, SORT);
+        return repository.findAll(pageable).map(ArticleVO::new).getContent();
     }
 
-    public ArticleVO getArticle(int articleId) {
-        Article article = articleDAO.findById(articleId);
+    public ArticleVO retrieveArticle(int articleId) {
+        Article article = repository.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
         return new ArticleVO(article);
     }
 
+    public Page<ArticleVO> viewArticles(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize, SORT);
+        return repository.findAllByType(pageable, ArticleType.NORMAL).map(ArticleVO::new);
+    }
+
     public ArticleVO viewArticle(int articleId) {
-        Article article = articleDAO.findById(articleId);
+        Article article = repository.findByIdAndType(articleId, ArticleType.NORMAL);
         ToolKit.assertNotNull(articleId, article);
-        ToolKit.assertVisible(article);
         return new ArticleVO(article);
     }
 
     public ArticleVO viewArticle(String alias) {
-        Article article = articleDAO.findByAlias(alias);
+        Article article = repository.findByAliasAndType(alias, ArticleType.NORMAL);
         ToolKit.assertNotNull(alias, article);
         return new ArticleVO(article);
     }
 
+    public ArticleVO viewPage(String alias) {
+        Article article = repository.findByAliasAndType(alias, ArticleType.PAGE);
+        ToolKit.assertNotNull(alias, article);
+        return new ArticleVO(article);
+    }
+
+    public Page<ArticleVO> searchArticles(int page, int pageSize, String query) {
+        QueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(query, "title", "summary", "content")
+                .analyzer(ElasticsearchConfiguration.ANALYZER);
+        HighlightBuilder highlightBuilder = new HighlightBuilder().field("title").field("summary")
+                .preTags("<b>").postTags("</b>");
+        SearchResponse searchResponse = client.prepareSearch("lightning").setTypes("article")
+                .setQuery(queryBuilder).highlighter(highlightBuilder)
+                .setSearchType(SearchType.QUERY_THEN_FETCH).setFrom(page * pageSize).setSize(pageSize)
+                .get();
+        SearchHits searchHits = searchResponse.getHits();
+        SearchHit[] hits = searchHits.getHits();
+        Map<Integer, IndexedArticle> articles = new HashMap<>(hits.length);
+        for(SearchHit hit : hits) {
+            IndexedArticle article = new IndexedArticle();
+            article.setId(Integer.valueOf(hit.getId()));
+            HighlightField titleHighlight = hit.getHighlightFields().get("title");
+            HighlightField summaryHighlight = hit.getHighlightFields().get("summary");
+            article.setTitle(titleHighlight == null ? null : titleHighlight.fragments()[0].string());
+            article.setSummary(summaryHighlight == null ? null : summaryHighlight.fragments()[0].string());
+            articles.put(article.getId(), article);
+        }
+        List<ArticleVO> articleVOs = repository.findAllById(articles.keySet()).stream().map(ArticleVO::new).peek(articleVO -> {
+            IndexedArticle article = articles.get(articleVO.getId());
+            articleVO.setTitle(ToolKit.defaultIfNull(article.getTitle(), articleVO.getTitle()));
+            articleVO.setSummary(ToolKit.defaultIfNull(article.getSummary(), articleVO.getSummary()));
+        }).collect(Collectors.toList());
+        return new PageImpl<>(articleVOs, PageRequest.of(page, pageSize), searchHits.getTotalHits());
+    }
+
     @Transactional
     public ArticleVO updateArticle(int articleId, ArticleDTO articleDTO) {
-        Article article = articleDAO.findById(articleId);
+        Article article = repository.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
-        BeanUtils.copyProperties(articleDTO, article, "alias", "category", "tags");
-        if (!articleDTO.getAlias().isEmpty()) {
-            ToolKit.assertPattern(articleDTO.getAlias(), PATTERN);
-            article.setAlias(articleDTO.getAlias());
-        } else {
-            article.setAlias(null);
-        }
+        BeanUtils.copyProperties(articleDTO, article);
         article.setModifiedAt(LocalDateTime.now());
-        article.setCategory(getCategory(articleDTO.getCategory()));
-        article.setTags(getTags(articleDTO.getTags()));
-        return new ArticleVO(articleDAO.save(article));
+        article = repository.save(article);
+        searchRepository.index(article);
+        return new ArticleVO(article);
     }
 
     @Transactional
     public void deleteArticle(int articleId) {
-        Article article = articleDAO.findById(articleId);
+        Article article = repository.findById(articleId);
         ToolKit.assertNotNull(articleId, article);
-        articleDAO.delete(article);
-    }
-
-    private Category getCategory(String categoryId) {
-        Category category = categoryDAO.findById(categoryId);
-        ToolKit.assertNotNull(categoryId, category);
-        return category;
-    }
-
-    private Tag getTag(String tagId) {
-        Tag tag = tagDAO.findById(tagId);
-        ToolKit.assertNotNull(tagId, tag);
-        return tag;
-    }
-
-    private List<Tag> getTags(List<String> tagIds) {
-        return tagIds.stream().map(this::getTag).collect(Collectors.toList());
+        article.setDeletedAt(LocalDateTime.now());
+        repository.save(article);
+        searchRepository.deleteById(articleId);
     }
 }

@@ -18,5 +18,5 @@ public class Redirection {
 
     @Basic
     @Column(name = "views")
-    private int views;
+    private Integer views = 0;
 }

@@ -1,65 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="theme-color" content="#C8C8C8"/>
-    <title th:text="${article.title}+' | '+${properties['name']}+' - '+${properties['logo']}"></title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.min.css}"/>
-    <link rel="amphtml" th:href="'/amp'+${#httpServletRequest.getRequestURI()}">
-</head>
+<html xmlns:th="http://www.thymeleaf.org" th:with="ToolKit=${T(com.moekr.lightning.util.ToolKit)}">
+<head th:replace="fragment/head::head(${article.title}+' | '+${ToolKit.FULL_NAME})"></head>
 <body>
-<div class="header">
-    <a class="header-logo" href="/">
-        <span th:text="${properties['logo']}"></span>
-        <span class="header-logo-sub" th:text="${properties['name']}"></span>
-    </a>
-    <ul class="header-menu">
-        <li>
-            <a th:href="@{/}">首页</a>
-        </li>
-        <li>
-            <a href="#">分类</a>
-            <ul>
-                <li th:each="category,state:${categories}">
-                    <a th:href="'/category/'+${category.id}" th:text="${category.name}"></a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a th:href="@{/archive}">归档</a>
-        </li>
-        <li>
-            <a th:href="@{/about}">关于</a>
-        </li>
-    </ul>
-</div>
-<div class="main">
+<header th:replace="fragment/header::header"></header>
+<div class="main" th:with="Properties=${ToolKit.properties}">
     <div class="post">
         <h1 class="post-title" th:text="${article.title}"></h1>
-        <div class="post-tags" th:if="${article.isVisible()}">
-            <p><span th:text="${article.views}"></span> 浏览 | 标签:<th:block th:if="${#lists.isEmpty(article.tags)}"> 无可用标签</th:block>
-                <th:block th:each="tag,state:${article.tags}">&nbsp;<a th:href="'/tag/'+${tag.id}" th:text="${tag.name}"></a></th:block>
-            </p>
+        <div class="post-tags" th:if="${article.isNormal()}">
+            <p th:inline="text">[[${article.views}]] 浏览 | 标签: [[${ToolKit.parseTags(article.tags)}]]</p>
         </div>
-        <p class="post-info" th:if="${article.isVisible()}">发表于<span th:text="${article.createdAt.toLocalDate()}"></span>， 最后修改于<span th:text="${article.modifiedAt.toLocalDate()}"></span>， 隶属于<a
-                th:href="'/category/'+${article.category.id}" th:text="${article.category.name}"></a>分类</p>
+        <p class="post-info" th:if="${article.isNormal()}">发表于<span th:text="${article.createdAt.toLocalDate()}"></span>， 最后修改于<span th:text="${article.modifiedAt.toLocalDate()}"></span>
         <div th:utext="${parser.apply(article.content)}"></div>
-        <p th:utext="${properties['eof']}"></p>
-        <p th:utext="${properties['copyright']}"></p>
+        <p th:utext="${Properties.eof}"></p>
+        <p th:utext="${Properties.copyright}"></p>
         <div id="disqus_thread"></div>
-        <div class="footer">
-            <p th:utext="${properties['footer']}"></p>
-        </div>
+        <footer th:replace="fragment/footer::footer"></footer>
     </div>
 </div>
-<script th:utext="'var disqus_config=function(){this.page.url=\'https://moekr.com'+${#httpServletRequest.getRequestURI()}+'\';this.page.identifier=\''+${article.id}+'\';};'"></script>
-<script th:src="@{/js/disqus.min.js}"></script>
-<script type="text/javascript" crossorigin="anonymous" integrity="sha256-EPrkNjGEmCWyazb3A/Epj+W7Qm2pB9vnfXw+X6LImPM=" src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
-<th:block th:if="${!#strings.isEmpty(properties['analytics'])}">
-    <script async="async" th:src="'https://www.googletagmanager.com/gtag/js?id='+${properties['analytics']}"></script>
-    <script type="text/javascript"
-            th:utext="'window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''+${properties['analytics']}+'\');'"></script>
-</th:block>
+<div th:replace="fragment/script::script(${article.id})"></div>
 </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="ToolKit=${T(com.moekr.lightning.util.ToolKit)}">
+<body>
+<div th:fragment="articles(utext)">
+    <!--/*@thymesVar id="articles" type="org.springframework.data.domain.Page"*/-->
+    <!--/*@thymesVar id="article" type="com.moekr.lightning.logic.vo.ArticleVO"*/-->
+    <div class="article" th:each="article,state:${articles.getContent()}">
+        <h1 class="post-title">
+            <a th:if="${utext}" th:href="'/article/'+${article.id}" th:utext="${article.title}"></a>
+            <a th:if="!${utext}" th:href="'/article/'+${article.id}" th:text="${article.title}"></a>
+        </h1>
+        <div class="post-date">
+            <p th:text="${article.views}+' 浏览 | '+${article.createdAt.toLocalDate()}"></p>
+        </div>
+        <div class="post-summary">
+            <p th:if="${utext}" th:utext="${article.summary}"></p>
+            <p th:if="!${utext}" th:text="${article.summary}"></p>
+        </div>
+        <div>
+            <a th:href="'/article/'+${article.id}">继续阅读</a>
+        </div>
+    </div>
+    <div class="no-articles" th:if="${articles.getContent().isEmpty()}">你仿佛来到了知识的荒原...</div>
+    <div class="pagination" th:with="query=${#httpServletRequest.getParameter('q')}">
+        <div class="prev-page">
+            <a th:if="${articles.isFirst()}">上一页</a>
+            <th:block th:if="!${articles.isFirst()}">
+                <a th:if="${query}" th:href="'?q='+${query}+'&p='+${articles.getNumber()}">上一页</a>
+                <a th:if="!${query}" th:href="'?p='+${articles.getNumber()}">上一页</a>
+            </th:block>
+        </div>
+        <div class="total-page">
+            <span th:inline="text">第 [[${articles.getNumber()+1}]] 页 / 共 [[${articles.getTotalPages()}]] 页</span>
+        </div>
+        <div class="next-page">
+            <a th:if="${articles.isLast()}">下一页</a>
+            <th:block th:if="!${articles.isLast()}">
+                <a th:if="${query}" th:href="'?q='+${query}+'&p='+${articles.getNumber()+2}">下一页</a>
+                <a th:if="!${query}" th:href="'?p='+${articles.getNumber()+2}">下一页</a>
+            </th:block>
+        </div>
+    </div>
+</div>
+</body>
+</html>

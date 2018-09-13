@@ -26,12 +26,12 @@ public class ArticleController {
 
     @GetMapping("/articles")
     public Map<String, Object> getArticles() {
-        return ToolKit.assemblyResponseBody(articleService.getArticles());
+        return ToolKit.assemblyResponseBody(articleService.retrieveArticles(0, Integer.MAX_VALUE));
     }
 
     @GetMapping("/article/{articleId}")
     public Map<String, Object> getArticle(@PathVariable int articleId) {
-        return ToolKit.assemblyResponseBody(articleService.getArticle(articleId));
+        return ToolKit.assemblyResponseBody(articleService.retrieveArticle(articleId));
     }
 
     @PutMapping("/article/{articleId}")

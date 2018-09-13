@@ -1,50 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="theme-color" content="#C8C8C8"/>
-    <title th:text="'出错了'+' | '+${properties['name']}+' - '+${properties['logo']}"></title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/index.min.css}"/>
-</head>
+<html xmlns:th="http://www.thymeleaf.org" th:with="ToolKit=${T(com.moekr.lightning.util.ToolKit)}">
+<head th:replace="fragment/head::head('出错了 | '+${ToolKit.FULL_NAME})"></head>
 <body>
-<div class="header">
-    <a class="header-logo" href="/">Moekr<span class="header-logo-sub">萌客</span></a>
-    <ul class="header-menu">
-        <li>
-            <a th:href="@{/}">首页</a>
-        </li>
-        <li>
-            <a href="#">分类</a>
-            <ul>
-                <li th:each="category,state:${categories}">
-                    <a th:href="'/category/'+${category.id}" th:text="${category.name}"></a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a th:href="@{/archive}">归档</a>
-        </li>
-        <li>
-            <a th:href="@{/about}">关于</a>
-        </li>
-    </ul>
-</div>
+<header th:replace="fragment/header::header"></header>
 <div class="main">
     <div class="index">
         <h1 class="error-title">Oops，似乎出现了一些问题……</h1>
         <p th:text="'错误代码：'+${error}"></p>
         <p th:text="'错误信息：'+${message}"></p>
-        <p th:if="${!#strings.isEmpty(properties['email'])}">错误反馈：<a th:href="'mailto:'+${properties['email']}" th:text="${properties['email']}"></a></p>
         <p><a th:href="@{/}" th:text="返回首页"></a></p>
         <!--/*@thymesVar id="stack" type="java.lang.String"*/-->
         <p th:if="${stack}">错误堆栈：</p>
         <pre><code th:text="${stack}" th:if="${stack}"></code></pre>
-        <div class="footer">
-            <p th:utext="${properties['footer']}"></p>
-        </div>
+        <footer th:replace="fragment/footer::footer"></footer>
     </div>
 </div>
-<script type="text/javascript" crossorigin="anonymous" integrity="sha256-EPrkNjGEmCWyazb3A/Epj+W7Qm2pB9vnfXw+X6LImPM=" src="https://cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<div th:replace="fragment/script::script('false')"></div>
 </body>
 </html>

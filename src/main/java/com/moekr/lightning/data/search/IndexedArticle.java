@@ -1,6 +1,5 @@
-package com.moekr.lightning.data.dto;
+package com.moekr.lightning.data.search;
 
-import com.moekr.lightning.data.search.ElasticsearchConfiguration;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -9,7 +8,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Data
 @Document(indexName = "lightning", type = "article")
-public class ArticleDTO {
+public class IndexedArticle {
     @Id
     @Field(type = FieldType.Integer, index = false, store = true)
     private int id;
