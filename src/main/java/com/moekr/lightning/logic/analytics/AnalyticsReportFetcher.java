@@ -17,6 +17,7 @@ import com.moekr.lightning.util.LightningProperties.AnalyticsProperties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -34,6 +35,7 @@ import java.util.Collections;
 import java.util.regex.Pattern;
 
 @Component
+@EnableScheduling
 public class AnalyticsReportFetcher {
     private static final Log LOG = LogFactory.getLog(AnalyticsReportFetcher.class);
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();

@@ -10,31 +10,34 @@ import org.elasticsearch.node.NodeValidationException;
 import org.elasticsearch.plugin.analysis.ik.AnalysisIkPlugin;
 import org.elasticsearch.plugins.Plugin;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import java.util.Collection;
 import java.util.Collections;
 
 @Configuration
+@EnableElasticsearchRepositories(basePackages = "com.moekr.lightning.data.search")
 public class ElasticsearchConfiguration implements DisposableBean {
     private static final Log LOG = LogFactory.getLog(ElasticsearchConfiguration.class);
     private static final Collection<Class<? extends Plugin>> PLUGINS = Collections.singletonList(AnalysisIkPlugin.class);
 
     public static final String ANALYZER = "ik_max_word";
 
-    private final ElasticsearchProperties properties;
-
+    private ElasticsearchProperties properties;
     private Node node;
 
-    @Autowired
-    public ElasticsearchConfiguration(ElasticsearchProperties properties) {
-        this.properties = properties;
+    @Bean
+    public ElasticsearchProperties elasticsearchProperties() {
+        properties = new ElasticsearchProperties();
+        return properties;
     }
 
     @Bean
+    @DependsOn("elasticsearchProperties")
     public Client elasticsearchClient() throws NodeValidationException {
         Settings.Builder settings = Settings.builder();
         settings.put("transport.type", "local");

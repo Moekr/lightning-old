@@ -6,11 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebMvcConfiguration implements WebMvcConfigurer {
     private final BlockRequestInterceptor blockRequestInterceptor;
 
     @Autowired
-    public WebConfig(BlockRequestInterceptor blockRequestInterceptor) {
+    public WebMvcConfiguration(BlockRequestInterceptor blockRequestInterceptor) {
         this.blockRequestInterceptor = blockRequestInterceptor;
     }
 
