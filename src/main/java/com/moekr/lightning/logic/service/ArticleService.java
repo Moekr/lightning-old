@@ -24,6 +24,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,14 @@ public class ArticleService {
         this.repository = repository;
         this.searchRepository = searchRepository;
         this.client = client;
+    }
+
+    @PostConstruct
+    private void indexAllArticles() {
+        searchRepository.deleteAll();
+        for (Article article : repository.findAll()) {
+            searchRepository.index(article);
+        }
     }
 
     @Transactional
